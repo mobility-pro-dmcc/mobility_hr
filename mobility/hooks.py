@@ -1,13 +1,25 @@
-from . import __version__ as app_version
-
 app_name = "mobility"
-app_title = "Mobility"
-app_publisher = "Frappe"
-app_description = "Custom App for Mobilty"
-app_icon = "octicon octicon-file-directory"
-app_color = "grey"
-app_email = "developers@frappe.io"
-app_license = "MIT"
+app_title = "Mobility HR"
+app_publisher = "Mobility Pro"
+app_description = "Hr rules for Mobility"
+app_email = "info@mobilityp.com"
+app_license = "mit"
+
+# Apps
+# ------------------
+
+# required_apps = []
+
+# Each item in the list will be shown as an app in the apps page
+# add_to_apps_screen = [
+# 	{
+# 		"name": "mobility",
+# 		"logo": "/assets/mobility/logo.png",
+# 		"title": "Mobility HR",
+# 		"route": "/mobility",
+# 		"has_permission": "mobility.api.permission.has_app_permission"
+# 	}
+# ]
 
 # Includes in <head>
 # ------------------
@@ -36,6 +48,11 @@ app_license = "MIT"
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
 # doctype_calendar_js = {"doctype" : "public/js/doctype_calendar.js"}
 
+# Svg Icons
+# ------------------
+# include app icons in desk
+# app_include_icons = "mobility/public/icons.svg"
+
 # Home Pages
 # ----------
 
@@ -44,7 +61,7 @@ app_license = "MIT"
 
 # website user home page (by Role)
 # role_home_page = {
-#	"Role": "home_page"
+# 	"Role": "home_page"
 # }
 
 # Generators
@@ -53,17 +70,65 @@ app_license = "MIT"
 # automatically create page for each record of this doctype
 # website_generators = ["Web Page"]
 
+# Jinja
+# ----------
+
+# add methods and filters to jinja environment
+# jinja = {
+# 	"methods": "mobility.utils.jinja_methods",
+# 	"filters": "mobility.utils.jinja_filters"
+# }
+
 # Installation
 # ------------
 
 # before_install = "mobility.install.before_install"
 # after_install = "mobility.install.after_install"
 
+# Uninstallation
+# ------------
+
+# before_uninstall = "mobility.uninstall.before_uninstall"
+# after_uninstall = "mobility.uninstall.after_uninstall"
+
+# Integration Setup
+# ------------------
+# To set up dependencies/integrations with other apps
+# Name of the app being installed is passed as an argument
+
+# before_app_install = "mobility.utils.before_app_install"
+# after_app_install = "mobility.utils.after_app_install"
+
+# Integration Cleanup
+# -------------------
+# To clean up dependencies/integrations with other apps
+# Name of the app being uninstalled is passed as an argument
+
+# before_app_uninstall = "mobility.utils.before_app_uninstall"
+# after_app_uninstall = "mobility.utils.after_app_uninstall"
+
+# Build
+# ------------------
+# To hook into the build process
+
+# after_build = "mobility.build.after_build"
+
+# To hook into the build process of other apps
+# The list of apps being built is passed as an argument
+
+# after_app_build = "mobility.build.after_app_build"
+
 # Desk Notifications
 # ------------------
 # See frappe.core.notifications.get_notification_config
 
 # notification_config = "mobility.notifications.get_notification_config"
+
+# Awesome Bar
+# -----------
+# Extra search results: list of dicts with label, description, route, index.
+# route: ["List", "ToDo"], "/desk/docs/some/page", or "https://example.com"
+# awesomebar_search = ["mobility.search.awesomebar_results"]
 
 # Permissions
 # -----------
@@ -94,7 +159,7 @@ app_license = "MIT"
 # 		"on_update": "method",
 # 		"on_cancel": "method",
 # 		"on_trash": "method"
-#	}
+# 	}
 # }
 
 # Scheduled Tasks
@@ -112,10 +177,10 @@ app_license = "MIT"
 # 	],
 # 	"weekly": [
 # 		"mobility.tasks.weekly"
-# 	]
+# 	],
 # 	"monthly": [
 # 		"mobility.tasks.monthly"
-# 	]
+# 	],
 # }
 
 # Testing
@@ -141,30 +206,44 @@ app_license = "MIT"
 #
 # auto_cancel_exempted_doctypes = ["Auto Repeat"]
 
+# Ignore links to specified DocTypes when deleting documents
+# -----------------------------------------------------------
+
+# ignore_links_on_delete = ["Communication", "ToDo"]
+
+# Request Events
+# ----------------
+# before_request = ["mobility.utils.before_request"]
+# after_request = ["mobility.utils.after_request"]
+
+# Job Events
+# ----------
+# before_job = ["mobility.utils.before_job"]
+# after_job = ["mobility.utils.after_job"]
 
 # User Data Protection
 # --------------------
 
-user_data_fields = [
-	{
-		"doctype": "{doctype_1}",
-		"filter_by": "{filter_by}",
-		"redact_fields": ["{field_1}", "{field_2}"],
-		"partial": 1,
-	},
-	{
-		"doctype": "{doctype_2}",
-		"filter_by": "{filter_by}",
-		"partial": 1,
-	},
-	{
-		"doctype": "{doctype_3}",
-		"strict": False,
-	},
-	{
-		"doctype": "{doctype_4}"
-	}
-]
+# user_data_fields = [
+# 	{
+# 		"doctype": "{doctype_1}",
+# 		"filter_by": "{filter_by}",
+# 		"redact_fields": ["{field_1}", "{field_2}"],
+# 		"partial": 1,
+# 	},
+# 	{
+# 		"doctype": "{doctype_2}",
+# 		"filter_by": "{filter_by}",
+# 		"partial": 1,
+# 	},
+# 	{
+# 		"doctype": "{doctype_3}",
+# 		"strict": False,
+# 	},
+# 	{
+# 		"doctype": "{doctype_4}"
+# 	}
+# ]
 
 # Authentication and authorization
 # --------------------------------
@@ -172,4 +251,16 @@ user_data_fields = [
 # auth_hooks = [
 # 	"mobility.auth.validate"
 # ]
+
+# Automatically update python controller files with type annotations for this app.
+# export_python_type_annotations = True
+
+# default_log_clearing_doctypes = {
+# 	"Logging DocType Name": 30  # days to retain logs
+# }
+
+# Translation
+# ------------
+# List of apps whose translatable strings should be excluded from this app's translations.
+# ignore_translatable_strings_from = []
 

@@ -3,4 +3,5 @@
 *.egg-info
 *.swp
 tags
-mobility/docs/current
+node_modules
+__pycache__
