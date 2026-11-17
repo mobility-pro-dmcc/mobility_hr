@@ -1,0 +1,93 @@
+{
+ "actions": [],
+ "creation": "2026-11-05 18:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "leave_type",
+  "min_service_years",
+  "max_service_years",
+  "annual_entitlement",
+  "allocation_frequency",
+  "proration_method",
+  "carry_forward"
+ ],
+ "fields": [
+  {
+   "columns": 2,
+   "fieldname": "leave_type",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Leave Type",
+   "options": "Leave Type",
+   "reqd": 1
+  },
+  {
+   "columns": 1,
+   "description": "Completed months \u00f7 12, so 0.5 = six months.",
+   "fieldname": "min_service_years",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Min Service (years)",
+   "non_negative": 1,
+   "reqd": 1
+  },
+  {
+   "columns": 1,
+   "description": "Leave 0 for no upper limit. The rule applies while min \u2264 completed years < max.",
+   "fieldname": "max_service_years",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Max Service (years, exclusive)",
+   "non_negative": 1
+  },
+  {
+   "columns": 1,
+   "fieldname": "annual_entitlement",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Annual Entitlement (days)",
+   "non_negative": 1,
+   "reqd": 1
+  },
+  {
+   "columns": 1,
+   "default": "Annual",
+   "description": "Annual: the full entitlement is allocated at the start of the leave period. Monthly: 1/12 is added each month.",
+   "fieldname": "allocation_frequency",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Allocation Frequency",
+   "options": "Annual\nMonthly"
+  },
+  {
+   "columns": 2,
+   "default": "Prorate by Remaining Months",
+   "description": "Applies when the employee becomes eligible (joins or reaches the milestone) during the leave period.",
+   "fieldname": "proration_method",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Proration",
+   "options": "None\nProrate by Remaining Days\nProrate by Remaining Months"
+  },
+  {
+   "columns": 1,
+   "fieldname": "carry_forward",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Carry Forward Unused Leaves"
+  }
+ ],
+ "istable": 1,
+ "links": [],
+ "modified": "2026-11-05 19:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Mobility HR",
+ "name": "Handbook Leave Entitlement Rule",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

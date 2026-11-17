@@ -1,0 +1,401 @@
+/*
+ * Brand design for every website page (portal pages, /me, web forms, error pages, the HR Handbook Guide…).
+ * Loaded through hooks.py → web_include_css; scoped to body.mp-brand (only when Brand Settings is enabled).
+ *
+ * Colours come from the company theme (Company Theme → --mp-* variables, see mobility_hr/branding.py) and
+ * the mode saved in this browser (html[data-mp-mode] = "bright" by default, or "dark"). Each mode only
+ * defines the --w-* palette below; every rule after that is shared.
+ * Login-page specifics live in mobility_login.css.
+ */
+@import url("https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Geist+Mono:wght@400;500&family=Playfair+Display:ital,wght@1,500&display=swap");
+
+/* ------------------------------------------------------------------ palettes */
+html body.mp-brand {
+	--mp-accent: #29f2e8;
+	--mp-dark-bg: #000000;
+	--mp-dark-surface: #0b0b0b;
+	--mp-bright-bg: #ffffff;
+	--mp-bright-surface: #f6f7f8;
+	--mp-accent-ink: var(--mp-bright-accent, color-mix(in srgb, var(--mp-accent) 55%, #000));
+}
+html[data-mp-mode="dark"] body.mp-brand {
+	--w-bg: var(--mp-dark-bg);
+	--w-surface: var(--mp-dark-surface);
+	--w-surface-2: color-mix(in srgb, var(--mp-dark-surface) 90%, #fff);
+	--w-card: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.015));
+	--w-text: #f2f2f2;
+	--w-heading: #fff;
+	--w-muted: #a3a3a3;
+	--w-border: rgba(255, 255, 255, 0.1);
+	--w-nav-bg: color-mix(in srgb, var(--mp-dark-bg) 72%, transparent);
+	--w-hover: rgba(255, 255, 255, 0.07);
+	--w-link: var(--mp-accent);
+	--w-accent-text: var(--mp-accent);
+	--w-btn-bg: #fff;
+	--w-btn-fg: #000;
+	--w-btn-hover-bg: var(--mp-accent);
+	--w-btn-hover-fg: #000;
+	--w-glow: color-mix(in srgb, var(--mp-accent) 30%, transparent);
+}
+html:not([data-mp-mode="dark"]) body.mp-brand {
+	--w-bg: var(--mp-bright-bg);
+	--w-surface: #ffffff;
+	--w-surface-2: var(--mp-bright-surface);
+	--w-card: #ffffff;
+	--w-text: #1f1f1f;
+	--w-heading: #0a0a0a;
+	--w-muted: #5f6368;
+	--w-border: rgba(0, 0, 0, 0.09);
+	--w-nav-bg: color-mix(in srgb, var(--mp-bright-bg) 80%, transparent);
+	--w-hover: rgba(0, 0, 0, 0.05);
+	--w-link: var(--mp-accent-ink);
+	--w-accent-text: var(--mp-accent-ink);
+	--w-btn-bg: #0a0a0a;
+	--w-btn-fg: #fff;
+	--w-btn-hover-bg: var(--mp-accent-ink);
+	--w-btn-hover-fg: #fff;
+	--w-glow: color-mix(in srgb, var(--mp-accent) 16%, transparent);
+}
+
+/* ------------------------------------------------------------------ Frappe variables → palette */
+body.mp-brand {
+	--mp-accent-soft: color-mix(in srgb, var(--mp-accent) 12%, transparent);
+	--font-stack: "Figtree", "IBM Plex Sans Arabic", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+	--primary: var(--w-accent-text);
+	--primary-color: var(--w-accent-text);
+	--bg-color: var(--w-bg);
+	--fg-color: var(--w-surface);
+	--card-bg: var(--w-surface);
+	--subtle-fg: var(--w-surface-2);
+	--subtle-accent: var(--w-surface-2);
+	--fg-hover-color: var(--w-hover);
+	--text-color: var(--w-text);
+	--heading-color: var(--w-heading);
+	--text-muted: var(--w-muted);
+	--control-bg: var(--w-surface-2);
+	--control-bg-on-gray: var(--w-surface-2);
+	--border-color: var(--w-border);
+	--dark-border-color: var(--w-border);
+	--table-border-color: var(--w-border);
+	--btn-default-bg: var(--w-surface-2);
+	--btn-default-hover-bg: var(--w-hover);
+	--btn-primary: var(--w-btn-bg);
+	--neutral: var(--w-btn-fg);
+	--modal-bg: var(--w-surface);
+	--popover-bg: var(--w-surface);
+	--shadow-base: none;
+	--card-shadow: none;
+	--icon-stroke: var(--w-muted);
+	font-family: var(--font-stack);
+	color: var(--w-text);
+	background:
+		radial-gradient(ellipse 45% 420px at 50% -160px, var(--w-glow), transparent 75%) no-repeat,
+		var(--w-bg) !important;
+	min-height: 100vh;
+}
+body.mp-brand h1,
+body.mp-brand h2,
+body.mp-brand h3,
+body.mp-brand h4,
+body.mp-brand .page-header h1 {
+	color: var(--w-heading);
+	letter-spacing: -0.02em;
+	font-weight: 600;
+}
+html[dir="rtl"] body.mp-brand h1,
+html[dir="rtl"] body.mp-brand h2,
+html[dir="rtl"] body.mp-brand h3 {
+	letter-spacing: 0; /* letter spacing breaks Arabic joining */
+}
+body.mp-brand a {
+	color: var(--w-link);
+}
+body.mp-brand a:hover {
+	color: var(--w-heading);
+}
+body.mp-brand .page-content-wrapper,
+body.mp-brand main,
+body.mp-brand .page_content,
+body.mp-brand .page-header-wrapper {
+	background: transparent !important;
+}
+
+/* ------------------------------------------------------------------ navbar: floating glass pill */
+body.mp-brand .navbar {
+	position: sticky;
+	top: 12px;
+	z-index: 1020;
+	margin: 12px auto 0;
+	max-width: 1160px;
+	width: calc(100% - 24px);
+	padding-block: 8px;
+	padding-inline: 18px 12px;
+	border: 1px solid var(--w-border);
+	border-radius: 999px;
+	background: var(--w-nav-bg) !important;
+	backdrop-filter: blur(18px);
+	-webkit-backdrop-filter: blur(18px);
+	box-shadow: none;
+}
+body.mp-brand .navbar .container {
+	max-width: none;
+	padding: 0;
+}
+body.mp-brand .navbar .navbar-brand,
+body.mp-brand .navbar .navbar-brand span {
+	color: var(--w-heading) !important;
+}
+body.mp-brand .mp-brand-mark {
+	display: inline-flex;
+	align-items: center;
+	gap: 10px;
+}
+body.mp-brand .mp-brand-mark img {
+	height: 22px;
+	width: auto;
+	max-width: 140px;
+	object-fit: contain;
+}
+/* logos per mode (Company Theme › Logo for Bright / Dark Mode, see branding.logo_html) */
+html:not([data-mp-mode="dark"]) .mp-logo-dark,
+html[data-mp-mode="dark"] .mp-logo-bright {
+	display: none !important;
+}
+/* no Bright logo: the Dark/Company logo (usually white) is shown black on light backgrounds */
+html:not([data-mp-mode="dark"]) .mp-logo-auto {
+	filter: brightness(0) !important;
+}
+body.mp-brand .mp-brand-mark b {
+	font-weight: 600;
+	font-size: 13px;
+	letter-spacing: 0.32em;
+	color: var(--w-heading);
+}
+body.mp-brand .navbar .nav-link {
+	color: var(--w-muted) !important;
+	font-weight: 500;
+	border-radius: 999px;
+	padding: 8px 14px !important;
+}
+body.mp-brand .navbar .nav-link:hover,
+body.mp-brand .navbar .nav-item.active .nav-link {
+	color: var(--w-heading) !important;
+	background: var(--w-hover);
+}
+body.mp-brand .navbar .btn-login-area,
+body.mp-brand .navbar .btn-primary {
+	border-radius: 999px;
+	background: var(--w-btn-bg) !important;
+	color: var(--w-btn-fg) !important;
+	font-weight: 600;
+	padding: 6px 16px;
+}
+body.mp-brand .navbar .btn-login-area:hover {
+	background: var(--w-btn-hover-bg) !important;
+	color: var(--w-btn-hover-fg) !important;
+}
+body.mp-brand .navbar .dropdown-menu {
+	background: var(--w-surface);
+	border: 1px solid var(--w-border);
+	border-radius: 14px;
+}
+body.mp-brand .navbar .dropdown-item {
+	color: var(--w-text);
+	border-radius: 8px;
+}
+body.mp-brand .navbar .dropdown-item:hover {
+	background: var(--w-hover);
+	color: var(--w-heading);
+}
+body.mp-brand .navbar-toggler {
+	color: var(--w-heading);
+	--icon-stroke: var(--w-heading);
+}
+@media (max-width: 991px) {
+	body.mp-brand .navbar {
+		border-radius: 22px;
+	}
+	body.mp-brand .navbar-collapse {
+		padding: 10px 0 6px;
+	}
+}
+
+/* ------------------------------------------------------------------ footer */
+body.mp-brand .web-footer {
+	background: transparent !important;
+	border-top: 1px solid var(--w-border);
+	color: var(--w-muted);
+	margin-top: 60px;
+}
+body.mp-brand .web-footer a,
+body.mp-brand .web-footer .footer-link {
+	color: var(--w-muted) !important;
+}
+body.mp-brand .web-footer a:hover {
+	color: var(--w-accent-text) !important;
+}
+body.mp-brand .web-footer .footer-subscribe input,
+body.mp-brand .web-footer input {
+	background: var(--w-surface-2) !important;
+	border: 1px solid var(--w-border) !important;
+	color: var(--w-heading);
+	border-radius: 999px;
+}
+
+/* ------------------------------------------------------------------ cards, lists, sidebars, web forms */
+body.mp-brand .web-list-item,
+body.mp-brand .list-group-item,
+body.mp-brand .card,
+body.mp-brand .web-form-wrapper,
+body.mp-brand .web-form .form-section,
+body.mp-brand .account-info,
+body.mp-brand .page-card,
+body.mp-brand .error-page .container {
+	background: var(--w-card) !important;
+	border: 1px solid var(--w-border) !important;
+	border-radius: 16px;
+	color: var(--w-text);
+}
+body.mp-brand .web-sidebar .sidebar-item a {
+	color: var(--w-muted) !important;
+	border-radius: 10px;
+}
+body.mp-brand .web-sidebar .sidebar-item a.active,
+body.mp-brand .web-sidebar .sidebar-item a:hover {
+	color: var(--w-accent-text) !important;
+	background: var(--mp-accent-soft);
+}
+body.mp-brand .form-control,
+body.mp-brand .web-form .form-control {
+	background: var(--w-surface-2) !important;
+	border: 1px solid var(--w-border) !important;
+	color: var(--w-heading) !important;
+	border-radius: 12px;
+}
+body.mp-brand .form-control:focus {
+	border-color: var(--w-accent-text) !important;
+	box-shadow: 0 0 0 3px color-mix(in srgb, var(--mp-accent) 18%, transparent) !important;
+}
+body.mp-brand .btn {
+	border-radius: 999px;
+}
+body.mp-brand .btn-primary {
+	background: var(--w-btn-bg) !important;
+	border-color: var(--w-btn-bg) !important;
+	color: var(--w-btn-fg) !important;
+	font-weight: 600;
+}
+body.mp-brand .btn-primary:hover {
+	background: var(--w-btn-hover-bg) !important;
+	border-color: var(--w-btn-hover-bg) !important;
+	color: var(--w-btn-hover-fg) !important;
+}
+body.mp-brand .btn-default,
+body.mp-brand .btn-secondary {
+	background: var(--w-surface-2) !important;
+	border: 1px solid var(--w-border) !important;
+	color: var(--w-heading) !important;
+}
+body.mp-brand table,
+body.mp-brand .table {
+	color: var(--w-text);
+}
+body.mp-brand .table th,
+body.mp-brand .table td {
+	border-color: var(--w-border) !important;
+}
+body.mp-brand .indicator-pill.blue,
+body.mp-brand .indicator-pill.cyan {
+	background: var(--mp-accent-soft);
+	color: var(--w-accent-text);
+}
+body.mp-brand code,
+body.mp-brand pre {
+	background: var(--w-surface-2);
+	color: var(--w-text);
+	font-family: "Geist Mono", ui-monospace, monospace;
+}
+
+/* page headings: italic accent on a word wrapped in <em> */
+body.mp-brand h1 em,
+body.mp-brand h2 em {
+	font-family: "Playfair Display", "IBM Plex Sans Arabic", Georgia, serif;
+	font-style: italic;
+	font-weight: 500;
+	color: var(--w-accent-text);
+}
+
+/* text Frappe hard-codes as dark grey (my account, headers) */
+body.mp-brand .my-account-header,
+body.mp-brand .my-account-name,
+body.mp-brand .my-account-item,
+body.mp-brand .page-header h1,
+body.mp-brand .web-list-item a,
+body.mp-brand .list-group-item a {
+	color: var(--w-heading) !important;
+}
+body.mp-brand .my-account-item-desc,
+body.mp-brand .text-muted {
+	color: var(--w-muted) !important;
+}
+body.mp-brand .my-account-avatar .avatar-frame,
+body.mp-brand .avatar .avatar-frame {
+	background: var(--w-surface-2) !important;
+	color: var(--w-accent-text) !important;
+}
+
+/* sticky sidebars sit below the floating navbar */
+body.mp-brand .web-sidebar {
+	top: 96px;
+}
+
+/* error pages: the stock illustration has a white background — show it as a rounded card */
+body.mp-brand .img-404,
+body.mp-brand .error-page img {
+	border-radius: 24px;
+	border: 1px solid var(--w-border);
+	box-shadow: 0 0 60px var(--w-glow);
+	max-width: min(360px, 80vw);
+	height: auto;
+}
+
+/* ------------------------------------------------------------------ mode + language toggles (login, navbar) */
+.mp-toggles {
+	position: fixed;
+	top: 16px;
+	inset-inline-end: 16px;
+	z-index: 1030;
+	display: flex;
+	gap: 6px;
+	padding: 5px;
+	border-radius: 999px;
+	border: 1px solid var(--w-border);
+	background: var(--w-nav-bg);
+	backdrop-filter: blur(16px);
+	-webkit-backdrop-filter: blur(16px);
+}
+.mp-toggles button {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	height: 34px;
+	padding: 0 12px;
+	border: 0;
+	border-radius: 999px;
+	background: none;
+	color: var(--w-muted);
+	font: 600 13px var(--font-stack);
+	cursor: pointer;
+}
+.mp-toggles button:hover {
+	color: var(--w-heading);
+	background: var(--w-hover);
+}
+.mp-toggles button[aria-pressed="true"] {
+	color: var(--w-heading);
+	background: var(--w-hover);
+}
+.mp-toggles svg {
+	width: 16px;
+	height: 16px;
+}

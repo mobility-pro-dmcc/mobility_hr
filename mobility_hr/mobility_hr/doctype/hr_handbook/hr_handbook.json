@@ -1,0 +1,624 @@
+{
+ "actions": [],
+ "autoname": "field:handbook_name",
+ "creation": "2026-11-05 18:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "handbook_name",
+  "company",
+  "is_active",
+  "priority",
+  "cb_main",
+  "effective_from",
+  "effective_to",
+  "description",
+  "documentation_url",
+  "applicability_section",
+  "applies_to_all_employees",
+  "applicability",
+  "period_tab",
+  "attendance_period_section",
+  "attendance_period_type",
+  "period_start_day",
+  "cb_period",
+  "period_end_day",
+  "week_start_day",
+  "late_section",
+  "enable_late_penalties",
+  "late_grace_source",
+  "late_grace_minutes",
+  "cb_late",
+  "grace_handling",
+  "max_grace_minutes_per_period",
+  "late_penalty_requires_approval",
+  "late_rules_section",
+  "late_penalty_rules",
+  "overtime_tab",
+  "overtime_section",
+  "enable_overtime",
+  "overtime_basis",
+  "count_early_arrival",
+  "overtime_requires_approval",
+  "cb_ot",
+  "night_start",
+  "night_end",
+  "overtime_rules_section",
+  "overtime_rules",
+  "holiday_work_section",
+  "holiday_work_compensation",
+  "holiday_comp_leave_type",
+  "holiday_work_requires_approval",
+  "cb_holiday",
+  "comp_days_weekly_off",
+  "comp_days_public_holiday",
+  "min_hours_for_full_comp_day",
+  "leave_tab",
+  "entitlement_section",
+  "enable_auto_leave_allocation",
+  "leave_entitlement_rules",
+  "leave_policy_section",
+  "leave_policy_rules",
+  "other_tab",
+  "permission_section",
+  "max_permission_minutes_per_month",
+  "cb_perm",
+  "max_permissions_per_month",
+  "max_checkin_requests_per_month",
+  "half_day_section",
+  "enable_half_day_rules",
+  "half_day_method",
+  "half_day_requires_approval",
+  "cb_half",
+  "half_day_min_hours",
+  "half_day_min_percentage",
+  "half_day_arrive_after",
+  "half_day_leave_before",
+  "half_day_deduction_section",
+  "enable_half_day_deduction",
+  "half_day_deduction_value",
+  "half_day_deduction_leave_type",
+  "cb_hdd",
+  "half_day_deduction_trigger",
+  "half_day_deduction_requires_approval",
+  "insufficient_balance_action",
+  "legal_tab",
+  "legal_notes"
+ ],
+ "fields": [
+  {
+   "fieldname": "handbook_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Handbook Name",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Company",
+   "options": "Company",
+   "reqd": 1
+  },
+  {
+   "default": "1",
+   "fieldname": "is_active",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Active"
+  },
+  {
+   "default": "0",
+   "description": "When several handbooks apply to an employee, the highest priority wins.",
+   "fieldname": "priority",
+   "fieldtype": "Int",
+   "label": "Priority"
+  },
+  {
+   "fieldname": "cb_main",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "effective_from",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Effective From",
+   "reqd": 1
+  },
+  {
+   "fieldname": "effective_to",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Effective To"
+  },
+  {
+   "fieldname": "description",
+   "fieldtype": "Small Text",
+   "label": "Description"
+  },
+  {
+   "default": "/hr-handbook-guide",
+   "description": "Page that explains this handbook. Opens from the 'HR Handbook Guide' link in the sidebar. Default: the built-in guide (/hr-handbook-guide).",
+   "fieldname": "documentation_url",
+   "fieldtype": "Data",
+   "label": "Documentation",
+   "options": "URL"
+  },
+  {
+   "fieldname": "applicability_section",
+   "fieldtype": "Section Break",
+   "label": "Applicability"
+  },
+  {
+   "default": "1",
+   "fieldname": "applies_to_all_employees",
+   "fieldtype": "Check",
+   "label": "Applies to All Employees of the Company"
+  },
+  {
+   "depends_on": "eval:!doc.applies_to_all_employees",
+   "description": "Employee matches if any row matches. Specific rows (Employee, Employee Group \u2026) beat broader ones when priorities are equal.",
+   "fieldname": "applicability",
+   "fieldtype": "Table",
+   "label": "Applicable To",
+   "options": "HR Handbook Applicability"
+  },
+  {
+   "fieldname": "period_tab",
+   "fieldtype": "Tab Break",
+   "label": "Attendance & Late"
+  },
+  {
+   "fieldname": "attendance_period_section",
+   "fieldtype": "Section Break",
+   "label": "Attendance Period Settings"
+  },
+  {
+   "default": "Calendar Month",
+   "fieldname": "attendance_period_type",
+   "fieldtype": "Select",
+   "label": "Period Type",
+   "options": "Calendar Month\nCustom Period"
+  },
+  {
+   "default": "1",
+   "depends_on": "eval:doc.attendance_period_type=='Custom Period'",
+   "description": "1\u201328. A period is named after the month it ends in, e.g. start 26 \u2192 'November' = 26 Oct \u2013 25 Nov.",
+   "fieldname": "period_start_day",
+   "fieldtype": "Int",
+   "label": "Month Start Day"
+  },
+  {
+   "fieldname": "cb_period",
+   "fieldtype": "Column Break"
+  },
+  {
+   "depends_on": "eval:doc.attendance_period_type=='Custom Period'",
+   "fieldname": "period_end_day",
+   "fieldtype": "Int",
+   "label": "Month End Day",
+   "read_only": 1
+  },
+  {
+   "default": "Saturday",
+   "description": "Used for weekly late calculations.",
+   "fieldname": "week_start_day",
+   "fieldtype": "Select",
+   "label": "Week Starts On",
+   "options": "Saturday\nSunday\nMonday\nTuesday\nWednesday\nThursday\nFriday"
+  },
+  {
+   "fieldname": "late_section",
+   "fieldtype": "Section Break",
+   "label": "Late Attendance Policy"
+  },
+  {
+   "fieldname": "enable_late_penalties",
+   "fieldtype": "Check",
+   "label": "Enable Late Penalties"
+  },
+  {
+   "default": "Shift Type Grace Period",
+   "depends_on": "enable_late_penalties",
+   "fieldname": "late_grace_source",
+   "fieldtype": "Select",
+   "label": "Grace Period Source",
+   "options": "Shift Type Grace Period\nHandbook Grace Period\nNo Grace Period"
+  },
+  {
+   "depends_on": "eval:doc.enable_late_penalties && doc.late_grace_source=='Handbook Grace Period'",
+   "fieldname": "late_grace_minutes",
+   "fieldtype": "Int",
+   "label": "Grace Minutes"
+  },
+  {
+   "fieldname": "cb_late",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "Ignore lateness within grace, count full minutes beyond",
+   "depends_on": "enable_late_penalties",
+   "fieldname": "grace_handling",
+   "fieldtype": "Select",
+   "label": "Grace Handling",
+   "options": "Ignore lateness within grace, count full minutes beyond\nSubtract grace from late minutes"
+  },
+  {
+   "depends_on": "enable_late_penalties",
+   "description": "Grace-forgiven minutes are capped per attendance period (e.g. 40). Forgiven minutes above the cap count as late in Monthly rules. 0 = no cap.",
+   "fieldname": "max_grace_minutes_per_period",
+   "fieldtype": "Int",
+   "label": "Max Grace Minutes per Period"
+  },
+  {
+   "default": "1",
+   "depends_on": "enable_late_penalties",
+   "description": "When ticked, penalties are created as drafts for review; otherwise they are submitted automatically.",
+   "fieldname": "late_penalty_requires_approval",
+   "fieldtype": "Check",
+   "label": "Penalties Require HR Approval"
+  },
+  {
+   "depends_on": "enable_late_penalties",
+   "fieldname": "late_rules_section",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "late_penalty_rules",
+   "fieldtype": "Table",
+   "label": "Late Penalty Rules",
+   "options": "Handbook Late Penalty Rule"
+  },
+  {
+   "fieldname": "overtime_tab",
+   "fieldtype": "Tab Break",
+   "label": "Overtime"
+  },
+  {
+   "fieldname": "overtime_section",
+   "fieldtype": "Section Break",
+   "label": "Overtime Policy"
+  },
+  {
+   "fieldname": "enable_overtime",
+   "fieldtype": "Check",
+   "label": "Enable Overtime Calculation"
+  },
+  {
+   "default": "Work After Shift End",
+   "depends_on": "enable_overtime",
+   "fieldname": "overtime_basis",
+   "fieldtype": "Select",
+   "label": "Working-day Overtime Basis",
+   "options": "Work After Shift End\nWorked Hours Exceeding Shift Hours"
+  },
+  {
+   "depends_on": "eval:doc.enable_overtime && doc.overtime_basis=='Work After Shift End'",
+   "fieldname": "count_early_arrival",
+   "fieldtype": "Check",
+   "label": "Count Work Before Shift Start"
+  },
+  {
+   "default": "1",
+   "depends_on": "enable_overtime",
+   "fieldname": "overtime_requires_approval",
+   "fieldtype": "Check",
+   "label": "Overtime Requires Approval"
+  },
+  {
+   "fieldname": "cb_ot",
+   "fieldtype": "Column Break"
+  },
+  {
+   "depends_on": "enable_overtime",
+   "description": "Leave empty to treat all overtime as 'Day'.",
+   "fieldname": "night_start",
+   "fieldtype": "Time",
+   "label": "Night Starts At"
+  },
+  {
+   "depends_on": "enable_overtime",
+   "fieldname": "night_end",
+   "fieldtype": "Time",
+   "label": "Night Ends At"
+  },
+  {
+   "depends_on": "enable_overtime",
+   "fieldname": "overtime_rules_section",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "overtime_rules",
+   "fieldtype": "Table",
+   "label": "Overtime Rules",
+   "options": "Handbook Overtime Rule"
+  },
+  {
+   "fieldname": "holiday_work_section",
+   "fieldtype": "Section Break",
+   "label": "Working on Holidays"
+  },
+  {
+   "default": "None",
+   "description": "Monetary uses the Overtime Rules for 'Weekly Off' / 'Public Holiday'.",
+   "fieldname": "holiday_work_compensation",
+   "fieldtype": "Select",
+   "label": "Compensation",
+   "options": "None\nMonetary\nCompensatory Leave\nMonetary and Compensatory Leave"
+  },
+  {
+   "depends_on": "eval:doc.holiday_work_compensation && doc.holiday_work_compensation.includes('Compensatory')",
+   "fieldname": "holiday_comp_leave_type",
+   "fieldtype": "Link",
+   "label": "Compensatory Leave Type",
+   "options": "Leave Type"
+  },
+  {
+   "default": "1",
+   "fieldname": "holiday_work_requires_approval",
+   "fieldtype": "Check",
+   "label": "Requires Manager Approval"
+  },
+  {
+   "fieldname": "cb_holiday",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "1",
+   "depends_on": "eval:doc.holiday_work_compensation && doc.holiday_work_compensation.includes('Compensatory')",
+   "fieldname": "comp_days_weekly_off",
+   "fieldtype": "Float",
+   "label": "Compensatory Days per Weekly Off Worked"
+  },
+  {
+   "default": "1",
+   "depends_on": "eval:doc.holiday_work_compensation && doc.holiday_work_compensation.includes('Compensatory')",
+   "fieldname": "comp_days_public_holiday",
+   "fieldtype": "Float",
+   "label": "Compensatory Days per Public Holiday Worked"
+  },
+  {
+   "depends_on": "eval:doc.holiday_work_compensation && doc.holiday_work_compensation.includes('Compensatory')",
+   "description": "Working fewer hours earns half the compensatory days. 0 = always full.",
+   "fieldname": "min_hours_for_full_comp_day",
+   "fieldtype": "Float",
+   "label": "Min Hours for Full Compensation"
+  },
+  {
+   "fieldname": "leave_tab",
+   "fieldtype": "Tab Break",
+   "label": "Leave"
+  },
+  {
+   "fieldname": "entitlement_section",
+   "fieldtype": "Section Break",
+   "label": "Leave Entitlement"
+  },
+  {
+   "fieldname": "enable_auto_leave_allocation",
+   "fieldtype": "Check",
+   "label": "Allocate Leaves Automatically"
+  },
+  {
+   "depends_on": "enable_auto_leave_allocation",
+   "fieldname": "leave_entitlement_rules",
+   "fieldtype": "Table",
+   "label": "Leave Entitlement Rules",
+   "options": "Handbook Leave Entitlement Rule"
+  },
+  {
+   "fieldname": "leave_policy_section",
+   "fieldtype": "Section Break",
+   "label": "Leave Policies"
+  },
+  {
+   "fieldname": "leave_policy_rules",
+   "fieldtype": "Table",
+   "label": "Leave Policy Rules",
+   "options": "Handbook Leave Policy Rule"
+  },
+  {
+   "fieldname": "other_tab",
+   "fieldtype": "Tab Break",
+   "label": "Permissions & Half Day"
+  },
+  {
+   "fieldname": "permission_section",
+   "fieldtype": "Section Break",
+   "label": "Permissions (Temporary Absence)"
+  },
+  {
+   "description": "Per attendance period. 0 = unlimited",
+   "fieldname": "max_permission_minutes_per_month",
+   "fieldtype": "Int",
+   "label": "Max Permission Minutes per Period"
+  },
+  {
+   "fieldname": "cb_perm",
+   "fieldtype": "Column Break"
+  },
+  {
+   "description": "0 = unlimited",
+   "fieldname": "max_permissions_per_month",
+   "fieldtype": "Int",
+   "label": "Max Permissions per Period"
+  },
+  {
+   "description": "Forgotten-punch requests allowed per attendance period. 0 = unlimited",
+   "fieldname": "max_checkin_requests_per_month",
+   "fieldtype": "Int",
+   "label": "Max Check-in Requests per Period"
+  },
+  {
+   "fieldname": "half_day_section",
+   "fieldtype": "Section Break",
+   "label": "Half Day Rules"
+  },
+  {
+   "description": "When enabled, these rules decide Present vs Half Day for attendance created from check-ins (instead of the Shift Type threshold).",
+   "fieldname": "enable_half_day_rules",
+   "fieldtype": "Check",
+   "label": "Use Handbook Half Day Rules"
+  },
+  {
+   "default": "Working Hours Below Minimum",
+   "depends_on": "enable_half_day_rules",
+   "fieldname": "half_day_method",
+   "fieldtype": "Select",
+   "label": "Identification Method",
+   "options": "Working Hours Below Minimum\nAttendance Percentage Below Minimum\nLeft Before Cut-off Time\nArrived After Cut-off Time\nAny Condition"
+  },
+  {
+   "depends_on": "enable_half_day_rules",
+   "description": "Half-day deductions created from this classification stay as drafts until approved.",
+   "fieldname": "half_day_requires_approval",
+   "fieldtype": "Check",
+   "label": "Requires Manager Approval"
+  },
+  {
+   "fieldname": "cb_half",
+   "fieldtype": "Column Break"
+  },
+  {
+   "depends_on": "enable_half_day_rules",
+   "fieldname": "half_day_min_hours",
+   "fieldtype": "Float",
+   "label": "Minimum Working Hours"
+  },
+  {
+   "depends_on": "enable_half_day_rules",
+   "description": "Of the shift's hours.",
+   "fieldname": "half_day_min_percentage",
+   "fieldtype": "Percent",
+   "label": "Minimum Attendance %"
+  },
+  {
+   "depends_on": "enable_half_day_rules",
+   "description": "Used by 'Arrived After Cut-off Time' and 'Any Condition'. An approved Late Arrival permission covering the delay prevents it.",
+   "fieldname": "half_day_arrive_after",
+   "fieldtype": "Time",
+   "label": "Half Day if Arriving After"
+  },
+  {
+   "depends_on": "enable_half_day_rules",
+   "fieldname": "half_day_leave_before",
+   "fieldtype": "Time",
+   "label": "Half Day if Leaving Before"
+  },
+  {
+   "fieldname": "half_day_deduction_section",
+   "fieldtype": "Section Break",
+   "label": "Half Day Deduction Rules"
+  },
+  {
+   "fieldname": "enable_half_day_deduction",
+   "fieldtype": "Check",
+   "label": "Deduct Leave for Half Days"
+  },
+  {
+   "default": "0.5",
+   "depends_on": "enable_half_day_deduction",
+   "fieldname": "half_day_deduction_value",
+   "fieldtype": "Float",
+   "label": "Deduction Value (days)"
+  },
+  {
+   "depends_on": "enable_half_day_deduction",
+   "fieldname": "half_day_deduction_leave_type",
+   "fieldtype": "Link",
+   "label": "Deduct From Leave Type",
+   "mandatory_depends_on": "enable_half_day_deduction",
+   "options": "Leave Type"
+  },
+  {
+   "fieldname": "cb_hdd",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "Half Day Attendance",
+   "depends_on": "enable_half_day_deduction",
+   "fieldname": "half_day_deduction_trigger",
+   "fieldtype": "Select",
+   "label": "Deduction Trigger",
+   "options": "Half Day Attendance\nHalf Day Attendance Without Approved Permission"
+  },
+  {
+   "default": "1",
+   "depends_on": "enable_half_day_deduction",
+   "fieldname": "half_day_deduction_requires_approval",
+   "fieldtype": "Check",
+   "label": "Require Approval"
+  },
+  {
+   "default": "Hold for HR Review",
+   "description": "Also used by 'Leave Days' late penalties.",
+   "fieldname": "insufficient_balance_action",
+   "fieldtype": "Select",
+   "label": "If Leave Balance Is Insufficient",
+   "options": "Hold for HR Review\nDeduct Available Balance"
+  },
+  {
+   "fieldname": "legal_tab",
+   "fieldtype": "Tab Break",
+   "label": "Legal Notes"
+  },
+  {
+   "description": "Record which rules implement legal minimums (with article numbers) and which are company benefits.",
+   "fieldname": "legal_notes",
+   "fieldtype": "Text Editor",
+   "label": "Statutory References & Notes"
+  }
+ ],
+ "links": [],
+ "modified": "2026-11-06 12:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Mobility HR",
+ "name": "HR Handbook",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "HR Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "HR User"
+  },
+  {
+   "read": 1,
+   "role": "Employee"
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "handbook_name",
+ "track_changes": 1
+}

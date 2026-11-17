@@ -1,0 +1,250 @@
+{% extends "templates/web.html" %}
+
+{% block title %}{{ _("HR Handbook Guide") }}{% endblock %}
+
+{% block page_content %}
+<style>
+	.hg { max-width: 1040px; margin: 0 auto; font-size: 15px; line-height: 1.6; }
+	.hg h1 { font-size: 28px; margin-bottom: 4px; }
+	.hg .sub { color: var(--text-muted, #6c757d); margin-bottom: 24px; }
+	.hg h2 { font-size: 21px; margin-top: 40px; padding-top: 12px; border-top: 1px solid var(--border-color, #e5e7eb); }
+	.hg table { width: 100%; font-size: 14px; margin: 12px 0 18px; border-collapse: collapse; }
+	.hg th, .hg td { border: 1px solid var(--border-color, #e5e7eb); padding: 6px 10px; vertical-align: top; text-align: left; }
+	.hg th { background: var(--subtle-fg, #f8f9fa); }
+	.hg figure { margin: 16px 0 24px; }
+	.hg figure img { width: 100%; border: 1px solid var(--border-color, #e5e7eb); border-radius: 8px; }
+	.hg figcaption { font-size: 13px; color: var(--text-muted, #6c757d); margin-top: 6px; }
+	.hg .toc { columns: 2; padding-left: 18px; }
+	.hg .note { background: var(--subtle-fg, #f8f9fa); border-left: 3px solid var(--primary, #2490ef); padding: 10px 14px; border-radius: 4px; }
+	.hg code { font-size: 13px; }
+	@media (max-width: 700px) { .hg .toc { columns: 1; } }
+	@media print { .hg h2 { break-before: auto; } .hg figure { break-inside: avoid; } }
+</style>
+
+<div class="hg">
+<h1>{{ _("HR Handbook Guide") }}</h1>
+<div class="sub">
+	Mobility Pro Egypt Employee Handbook (January 2023) in ERPNext{% if handbook %} · record <a href="/app/hr-handbook/{{ handbook.name | urlencode }}">{{ handbook.name }}</a>{% endif %}
+</div>
+
+<ol class="toc">
+	<li><a href="#overview">Overview</a></li>
+	<li><a href="#record">The handbook record</a></li>
+	<li><a href="#hours">Working hours, shift and holidays</a></li>
+	<li><a href="#tardiness">Tardiness (§8)</a></li>
+	<li><a href="#halfday">Half day (§8.1.1)</a></li>
+	<li><a href="#permissions">Permissions (§4.6.5)</a></li>
+	<li><a href="#leave">Leave types and policies</a></li>
+	<li><a href="#entitlement">Leave entitlement</a></li>
+	<li><a href="#overtime">Overtime and holiday work</a></li>
+	<li><a href="#dashboard">Employee dashboard</a></li>
+	<li><a href="#operations">HR daily operations</a></li>
+	<li><a href="#open">Not automated, assumptions, legal points</a></li>
+</ol>
+
+<h2 id="overview">1. Overview</h2>
+<p>The handbook is recorded as an <b>HR Handbook</b> record. The system applies its attendance, tardiness, half-day, permission and leave rules automatically from the fingerprint check-ins sent by the ZKTeco devices. Where a policy contradicts the Egyptian Labour Law, the law prevails (handbook disclaimer).</p>
+<ol>
+	<li><b>Check-in</b>: each punch arrives as an <i>Employee Checkin</i>.</li>
+	<li><b>Attendance</b>: HRMS turns the day's check-ins into an <i>Attendance</i> (Present, Absent, Half Day, On Leave).</li>
+	<li><b>Handbook rules</b>: the handbook adjusts that record (for example a Half Day for arriving after 11:00) and writes the reason in <i>Policy Classification</i>.</li>
+	<li><b>Nightly processing</b>: penalties, half-day deductions, leave allocations and overtime records are created.</li>
+	<li><b>Review</b>: HR approves or dismisses each penalty and deduction before it takes effect.</li>
+	<li><b>Dashboard</b>: each employee sees their month at <a href="/hr-dashboard">/hr-dashboard</a>.</li>
+</ol>
+
+<h2 id="record">2. The handbook record</h2>
+<p>All rules live in one record: <b>HR › HR Handbook › Mobility Pro Egypt Handbook 2023</b>, applying to all Mobility Pro employees from 1 January 2023.</p>
+<table>
+	<tr><th>Setting</th><th>Value</th><th>Clause</th></tr>
+	<tr><td>Company</td><td>Mobility Pro</td><td>—</td></tr>
+	<tr><td>Effective From</td><td>2023-01-01, no end date</td><td>Jan 2023 edition</td></tr>
+	<tr><td>Applies to</td><td>All employees of the company</td><td>§2</td></tr>
+	<tr><td>Attendance period</td><td>Calendar month</td><td>§8.1.3.2</td></tr>
+	<tr><td>Week starts on</td><td>Sunday</td><td>§4.5.1</td></tr>
+</table>
+<p>Tabs: <b>Details</b>, <b>Attendance &amp; Late</b>, <b>Overtime</b>, <b>Leave</b>, <b>Permissions &amp; Half Day</b>, <b>Legal Notes</b>.</p>
+<p><b>Several handbooks.</b> A group with different rules (for example Field Staff, §4.5.3) gets its own handbook: untick <i>Applies to All Employees</i> and list the department, branch, designation or employees. The higher <b>Priority</b> wins; on a tie the more specific one wins.</p>
+<p><b>Changing a rule</b> only affects future calculations. Every penalty, deduction and overtime record keeps a copy of the rule it used. For a new edition, set <i>Effective To</i> and create a new handbook.</p>
+<figure><img src="{{ img }}handbook_details.png?v={{ img_version }}" alt="Handbook record, Details tab" loading="lazy"><figcaption>The handbook record, Details tab. The <b>HR Handbook Guide</b> link in the sidebar opens this page.</figcaption></figure>
+
+<h2 id="hours">3. Working hours, shift and holidays</h2>
+<p>Sunday to Thursday, 09:00–17:30, including a 30-minute break (§4.5.1). This lives in the Shift Type and Holiday List.</p>
+<table>
+	<tr><th>Item</th><th>Where</th><th>Value</th></tr>
+	<tr><td>Shift</td><td>Shift Type <b>normal</b></td><td>09:00–17:30</td></tr>
+	<tr><td>Weekly offs</td><td>Holiday List <b>2026</b></td><td>Friday and Saturday</td></tr>
+	<tr><td>Public holidays</td><td>Holiday List <b>2026</b></td><td>11 Egyptian public holidays (e.g. 8 Oct, Armed Forces Day)</td></tr>
+</table>
+<p>Holidays are never counted as late, absent or working days; work on them is holiday work. Public holidays are published each January (§5.14.2): HR creates holiday list <b>2027</b> and links it to the shift before 1 January.</p>
+<p><b>Ramadan</b> (§4.5.4): create a shift such as <i>Ramadan 09:00–15:30</i> and assign it with <b>Shift Assignment Tool</b> for the Ramadan dates. <b>Field staff</b> (§4.5.3): a separate shift, or a separate handbook with tardiness penalties off.</p>
+
+<h2 id="tardiness">4. Tardiness (§8)</h2>
+<p>Lateness is added up over the calendar month. From 45 counted minutes a salary deduction is proposed; HR approves it.</p>
+<ol>
+	<li>Late minutes = first check-in − 09:00.</li>
+	<li>Approved permission time is removed (§8.2.5).</li>
+	<li>Grace: 10 minutes or less is forgiven; 11 or more counts in full.</li>
+	<li>Forgiven minutes are capped at 40 per month (§8.1.2); above that they count as late.</li>
+</ol>
+<table>
+	<tr><th>Counted minutes in the month</th><th>Salary deduction</th></tr>
+	<tr><td>0–44</td><td>none</td></tr>
+	<tr><td>45–60</td><td>½ day</td></tr>
+	<tr><td>61–75</td><td>1 day</td></tr>
+	<tr><td>76–90</td><td>2 days</td></tr>
+	<tr><td>91–120</td><td>3 days</td></tr>
+	<tr><td>121 or more</td><td>5 days</td></tr>
+</table>
+<table>
+	<tr><th>Example</th><th>Arrivals</th><th>Counted</th><th>Result</th></tr>
+	<tr><td>A</td><td>09:07, 09:09, 09:05</td><td>0 (21 min forgiven)</td><td>No deduction</td></tr>
+	<tr><td>B</td><td>09:25, 09:18, 09:08</td><td>25 + 18 = 43</td><td>No deduction</td></tr>
+	<tr><td>C</td><td>09:25, 09:22, 09:30</td><td>77</td><td>2 days</td></tr>
+	<tr><td>D</td><td>09:08 on six days + 09:40 once</td><td>40 + 8 over the cap = 48</td><td>½ day</td></tr>
+	<tr><td>E</td><td>09:40 with approved permission 09:00–09:30</td><td>10 → forgiven</td><td>No deduction</td></tr>
+</table>
+<p class="note">Real case: Ahmed Mostafa Zaytoon, October 2026: 09:18 on 15 Oct and 09:05 on 22 Oct → 18 counted minutes, no deduction.</p>
+<p>At the start of each month the system creates one draft <b>Attendance Penalty</b> per employee who reached a tier, listing every late day. <b>Submit</b> to apply, <b>Cancel</b> to dismiss (never recreated), <b>Amend</b> to correct. The penalty value is the number of days' salary.</p>
+<figure><img src="{{ img }}handbook_late.png?v={{ img_version }}" alt="Attendance & Late tab" loading="lazy"><figcaption>Attendance &amp; Late tab: grace, monthly cap and deduction tiers.</figcaption></figure>
+
+<h2 id="halfday">5. Half day (§8.1.1)</h2>
+<p>Arriving after <b>11:00</b> or leaving before <b>16:00</b> without prior approval makes the day a Half Day, and 0.5 day is deducted from Annual Leave after HR approval.</p>
+<ul>
+	<li>First check-in after 11:00 → Half Day, unless an approved <i>Late Arrival</i> permission covers the whole delay.</li>
+	<li>Last check-out before 16:00 → Half Day, unless an approved <i>Early Departure</i> permission covers it.</li>
+</ul>
+<p>The next night a draft <b>Half Day Leave Deduction</b> (0.5 Annual Leave) is created. Submitting deducts; cancelling restores. If the balance is too low it stays a draft for HR.</p>
+<table>
+	<tr><th>Check-in / out</th><th>Permission</th><th>Result</th></tr>
+	<tr><td>09:05 / 17:35</td><td>—</td><td>Present</td></tr>
+	<tr><td>11:20 / 17:30</td><td>—</td><td>Half Day, 0.5 Annual Leave</td></tr>
+	<tr><td>11:20 / 17:30</td><td>Late Arrival 09:00–11:30</td><td>Present, not late</td></tr>
+	<tr><td>11:20 / 17:30</td><td>Late Arrival 09:00–11:00</td><td>Half Day (permission doesn't cover the whole delay)</td></tr>
+	<tr><td>09:00 / 15:30</td><td>—</td><td>Half Day, 0.5 Annual Leave</td></tr>
+	<tr><td>09:00 / 15:30</td><td>Early Departure 15:30–17:30</td><td>Present</td></tr>
+</table>
+<p class="note">Real case: Ahmed Sharaf, 6 Oct 2026, punched only at 17:47 and 17:51 → Half Day; deduction HD-DED-2026-00003 waits for HR. Check for a missed morning punch before approving.</p>
+<figure><img src="{{ img }}handbook_halfday.png?v={{ img_version }}" alt="Permissions & Half Day tab" loading="lazy"><figcaption>Permissions &amp; Half Day tab.</figcaption></figure>
+<figure><img src="{{ img }}halfday_deduction.png?v={{ img_version }}" alt="Half Day Leave Deduction" loading="lazy"><figcaption>A Half Day Leave Deduction waiting for approval.</figcaption></figure>
+
+<h2 id="permissions">6. Permissions (§4.6.5 / §8.2.5)</h2>
+<p>Once a month, up to 2 hours, with the manager's prior consent: recorded as an <b>Employee Permission</b>.</p>
+<ol>
+	<li>Employee or HR: <b>Employee Permission › New</b>; choose Late Arrival, Early Departure or Temporary Absence.</li>
+	<li>Set date, start and end time, reason. Repetition stays <i>One-time</i>.</li>
+	<li>Manager or HR sets <i>Approval Status</i> to <b>Approved</b> and submits. Employees cannot approve their own.</li>
+</ol>
+<p>Limits: 1 permission and 120 minutes per month; overlapping permissions are refused. Approved permission time is never late time and prevents a Half Day.</p>
+<p class="note">Example: Late Arrival 09:00–11:00 on 12 Nov, approved; arrives 10:50 → not late, no half day. A second request on 20 Nov is refused: <i>Only 1 permission(s) are allowed in the period 2026-11-01 – 2026-11-30.</i></p>
+<p>§4.6.5.1 (extra requests → half-day deduction): the system refuses them instead; HR records any exception manually.</p>
+<figure><img src="{{ img }}permission_new.png?v={{ img_version }}" alt="New Employee Permission" loading="lazy"><figcaption>Requesting a permission.</figcaption></figure>
+
+<h2 id="leave">7. Leave types and policies (§4.6.2, §5.6–5.13)</h2>
+<p>Rules are checked when a Leave Application is saved and approved; a request that breaks one is refused with the reason.</p>
+<table>
+	<tr><th>Leave type</th><th>Notice</th><th>Per request</th><th>Per year</th><th>Service</th><th>Other</th></tr>
+	<tr><td>Annual Leave</td><td>28 days</td><td>max 10 calendar days</td><td>per entitlement</td><td>6 months; not in probation</td><td>—</td></tr>
+	<tr><td>Casual Leave</td><td>1 day</td><td>max 2 days</td><td>6</td><td>1 year</td><td>Also deducted from Annual</td></tr>
+	<tr><td>Emergency Leave</td><td>same day</td><td>—</td><td>5</td><td>1 year</td><td>Also deducted from Annual</td></tr>
+	<tr><td>Sick Leave</td><td>same day</td><td>—</td><td>5</td><td>6 months</td><td>Medical certificate attached</td></tr>
+	<tr><td>Maternity Leave</td><td>150 days</td><td>max 90</td><td>—</td><td>10 months</td><td>—</td></tr>
+	<tr><td>Paternity Leave</td><td>—</td><td>max 3</td><td>—</td><td>—</td><td>—</td></tr>
+	<tr><td>Bereavement Leave</td><td>—</td><td>max 7</td><td>—</td><td>—</td><td>7/2/1 days by degree (HR)</td></tr>
+	<tr><td>Marriage Leave</td><td>—</td><td>max 5</td><td>—</td><td>—</td><td>Once per employment (HR)</td></tr>
+	<tr><td>Pilgrimage Leave</td><td>—</td><td>max 15</td><td>—</td><td>5 years</td><td>Once per employment (HR)</td></tr>
+</table>
+<p><b>Deducted from Annual Leave</b> (§5.7, §5.8): approving 2 days of Casual Leave also reduces Annual Leave by 2. Cancelling returns both.</p>
+<table>
+	<tr><th>Request</th><th>Result</th></tr>
+	<tr><td>Annual Leave applied 10 Nov for 17–20 Nov</td><td>Refused: needs 28 days' notice</td></tr>
+	<tr><td>Annual Leave, 14 days in one block</td><td>Refused: max 10 days per request</td></tr>
+	<tr><td>Casual Leave, 2 days, 1 day's notice, 3 years' service</td><td>Accepted; Casual 6 → 4, Annual 21 → 19</td></tr>
+	<tr><td>Sick Leave approved without a certificate</td><td>Refused until a file is attached</td></tr>
+	<tr><td>Annual Leave, employee joined 3 months ago</td><td>Refused: available after 6 months</td></tr>
+</table>
+<p><b>HR override:</b> an HR Manager can tick <i>Override Handbook Policy</i> on the application; the override is logged as a comment. Event-based leave (maternity, paternity, bereavement, marriage, pilgrimage) has no automatic balance: HR allocates it when notified.</p>
+<figure><img src="{{ img }}handbook_leave.png?v={{ img_version }}" alt="Leave tab" loading="lazy"><figcaption>Leave tab: entitlement rules and leave policy rules.</figcaption></figure>
+
+<h2 id="entitlement">8. Leave entitlement and automatic allocation</h2>
+<p>Every night the system creates or tops up the year's allocations from each employee's Date of Joining.</p>
+<table>
+	<tr><th>Leave type</th><th>Service</th><th>Days / year</th><th>How</th></tr>
+	<tr><td>Annual</td><td>under 1 year</td><td>21, proportional</td><td>1.75 per month worked (§5.6.5)</td></tr>
+	<tr><td>Annual</td><td>1–10 years</td><td>21</td><td>Full at start of year (§5.6.2)</td></tr>
+	<tr><td>Annual</td><td>10+ years</td><td>30</td><td>Full (Labour Law)</td></tr>
+	<tr><td>Casual</td><td>1+ year</td><td>6</td><td>Full (§5.7)</td></tr>
+	<tr><td>Emergency</td><td>1+ year</td><td>5</td><td>Full (§5.8)</td></tr>
+	<tr><td>Sick</td><td>6+ months</td><td>5</td><td>Full (§5.12.1)</td></tr>
+</table>
+<table>
+	<tr><th>Employee</th><th>On</th><th>Annual Leave 2026</th></tr>
+	<tr><td>Joined 17 Sep 2023</td><td>5 Nov 2026</td><td>21 days (real: HR-LAL-2026-00001)</td></tr>
+	<tr><td>Joined 15 Apr 2026</td><td>5 Nov 2026</td><td>May–Nov 7 × 1.75 = 12.25; 14 on 1 Dec; usable from 15 Oct</td></tr>
+	<tr><td>Joined 1 Jun 2025</td><td>Mar 2026</td><td>3 × 1.75 = 5.25; 21 from 1 Jun 2026</td></tr>
+	<tr><td>Joined 1 Jul 2016</td><td>1 Jul 2026</td><td>25.5 (Jan–Jun at 21/yr + Jul–Dec at 30/yr)</td></tr>
+</table>
+<p>Manual allocations are never changed, and allocations are never reduced automatically.</p>
+<figure><img src="{{ img }}leave_allocation.png?v={{ img_version }}" alt="Automatic Leave Allocation" loading="lazy"><figcaption>An Annual Leave allocation created by the handbook.</figcaption></figure>
+
+<h2 id="overtime">9. Overtime and holiday work</h2>
+<p>The handbook sets no overtime pay rate (§8.1.3.4: monitored for bonus), so extra hours are <b>tracked</b> at multiplier 1.0.</p>
+<table>
+	<tr><th>Day type</th><th>Counts</th><th>Rounding</th><th>Minimum</th></tr>
+	<tr><td>Working day</td><td>Time after 17:30</td><td>Down to 15 min</td><td>30 min</td></tr>
+	<tr><td>Weekly off</td><td>Every hour worked</td><td>Down to 15 min</td><td>—</td></tr>
+	<tr><td>Public holiday</td><td>Every hour worked</td><td>Down to 15 min</td><td>—</td></tr>
+</table>
+<table>
+	<tr><th>Example</th><th>Counted</th></tr>
+	<tr><td>Leaves at 17:50</td><td>20 → 15 min, under 30 → nothing</td></tr>
+	<tr><td>Leaves at 18:40</td><td>70 → 60 min</td></tr>
+	<tr><td>Works Friday 10:00–14:10</td><td>250 → 240 min of weekly-off work</td></tr>
+	<tr><td>Real: EMP-OT-2026-00002, 15 Oct, 09:18–18:50</td><td>80 → 75 min = 1.25 h</td></tr>
+</table>
+<p>When legal confirms statutory rates, change the multipliers on the Overtime tab; approved records keep their original rate.</p>
+<figure><img src="{{ img }}handbook_overtime.png?v={{ img_version }}" alt="Overtime tab" loading="lazy"><figcaption>Overtime tab.</figcaption></figure>
+<figure><img src="{{ img }}overtime_record.png?v={{ img_version }}" alt="Employee Overtime record" loading="lazy"><figcaption>Employee Overtime EMP-OT-2026-00002 with its breakdown.</figcaption></figure>
+
+<h2 id="dashboard">10. Employee dashboard</h2>
+<p>Every employee sees their month at <a href="/hr-dashboard">/hr-dashboard</a>; only their own data. HR can enter an Employee ID.</p>
+<ul>
+	<li><b>Cards:</b> working, worked and absent days; late minutes; deductions; overtime (approved and pending); leave taken; annual leave left; half days; WFH days.</li>
+	<li><b>Daily table:</b> date, shift, first in, last out, hours, late minutes, status, notes (holidays, leave, permissions, missing punches).</li>
+	<li><b>Below:</b> leave balances, deductions, overtime.</li>
+</ul>
+<figure><img src="{{ img }}dashboard.png?v={{ img_version }}" alt="Employee dashboard" loading="lazy"><figcaption>Ahmed Mostafa Zaytoon, October 2026.</figcaption></figure>
+
+<h2 id="operations">11. HR daily operations</h2>
+<table>
+	<tr><th>When</th><th>Task</th></tr>
+	<tr><td>Daily</td><td>Approve Employee Permissions and Leave Applications; check Half Days in Attendance</td></tr>
+	<tr><td>Weekly</td><td>Review draft Half Day Leave Deductions and Employee Overtime: Submit or Cancel</td></tr>
+	<tr><td>1st working day of month</td><td>Review draft Attendance Penalties for the previous month; pass approved penalties and overtime to payroll</td></tr>
+	<tr><td>New employee</td><td>Date of Joining, Attendance Device ID, Scheduled Confirmation Date</td></tr>
+	<tr><td>Missed punch</td><td>Correct the Employee Checkin before attendance is processed</td></tr>
+	<tr><td>Policy change</td><td>Edit the handbook (future only) or create a new edition</td></tr>
+</table>
+
+<h2 id="open">12. Not automated, assumptions, legal points</h2>
+<table>
+	<tr><th>Clause</th><th>Handling</th></tr>
+	<tr><td>§8.1.3.1 Arriving 09:11+ on 5 days → reminder, warning, deduction</td><td>Disciplinary, manual (late days visible on the dashboard)</td></tr>
+	<tr><td>§4.6.4 / §8.2.4 No notice given</td><td>Disciplinary, manual</td></tr>
+	<tr><td>§4.6.5.1 Extra permissions → half-day deduction</td><td>Refused by the system</td></tr>
+	<tr><td>§5.10.2, §5.11, §5.13 Once / twice per employment</td><td>HR checks history before allocating</td></tr>
+	<tr><td>§5.12.2 Sick leave beyond 5 days</td><td>Employee applies for Annual Leave</td></tr>
+	<tr><td>§9, §12 Mistakes and offences</td><td>Disciplinary, outside attendance</td></tr>
+	<tr><td>Salary deductions and overtime pay</td><td>Approved here; not yet posted to payroll</td></tr>
+</table>
+<p><b>Assumptions:</b> the 40-minute cap applies to forgiven minutes; accumulated tardiness is counted after grace; "half day leave" means 0.5 Annual Leave; first-year leave accrues 1.75 per month and is usable after 6 months; probation ends 6 months after joining unless a confirmation date is set.</p>
+<p><b>Legal points to confirm</b> (the Labour Law prevails):</p>
+<ul>
+	<li>Annual leave: Law 14/2025 gives 15 days in the first year, 21 from the second, 30 after 10 years or from age 50 (age rule not automated).</li>
+	<li>Overtime pay: at least +35% day / +70% night per published reports; another reading gives +25% day. Tracked at 1.0 until confirmed.</li>
+	<li>Weekly rest day work: day's pay plus a day off; public holidays: double pay or a compensatory day.</li>
+	<li>Maternity leave length and the two-times limit.</li>
+	<li>Legal limits on tardiness salary deductions.</li>
+</ul>
+</div>
+{% endblock %}

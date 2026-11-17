@@ -1,0 +1,109 @@
+{
+ "actions": [],
+ "creation": "2026-11-05 18:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "overtime_category",
+  "time_of_day",
+  "from_time",
+  "to_time",
+  "raw_minutes",
+  "counted_minutes",
+  "multiplier",
+  "fixed_rate",
+  "payable_hours",
+  "amount",
+  "overtime_type",
+  "is_statutory"
+ ],
+ "fields": [
+  {
+   "columns": 2,
+   "fieldname": "overtime_category",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Category"
+  },
+  {
+   "columns": 1,
+   "fieldname": "time_of_day",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Time of Day"
+  },
+  {
+   "fieldname": "from_time",
+   "fieldtype": "Datetime",
+   "label": "From"
+  },
+  {
+   "fieldname": "to_time",
+   "fieldtype": "Datetime",
+   "label": "To"
+  },
+  {
+   "columns": 1,
+   "fieldname": "raw_minutes",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "Raw Minutes"
+  },
+  {
+   "columns": 1,
+   "fieldname": "counted_minutes",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "Counted Minutes"
+  },
+  {
+   "columns": 1,
+   "fieldname": "multiplier",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Multiplier"
+  },
+  {
+   "fieldname": "fixed_rate",
+   "fieldtype": "Currency",
+   "label": "Fixed Rate"
+  },
+  {
+   "columns": 1,
+   "fieldname": "payable_hours",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Payable Hours"
+  },
+  {
+   "columns": 1,
+   "fieldname": "amount",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Amount"
+  },
+  {
+   "fieldname": "overtime_type",
+   "fieldtype": "Link",
+   "label": "Overtime Type",
+   "options": "Overtime Type"
+  },
+  {
+   "fieldname": "is_statutory",
+   "fieldtype": "Check",
+   "label": "Statutory"
+  }
+ ],
+ "istable": 1,
+ "links": [],
+ "modified": "2026-11-05 18:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Mobility HR",
+ "name": "Employee Overtime Detail",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

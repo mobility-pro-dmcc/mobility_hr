@@ -1,0 +1,202 @@
+/*
+ * Brand design for the login / password pages. Name, logo, tagline and colours come from the company
+ * (Company Theme, Company Logo, Brand Settings). Colours use the --w-* palette of mobility_website.css,
+ * so the page follows the Bright / Dark toggle (html[data-mp-mode]). Scoped to
+ * body.mp-brand[data-path="login"] / [data-path="update-password"].
+ */
+body.mp-brand[data-path="login"],
+body.mp-brand[data-path="update-password"] {
+	--card-bg: transparent;
+	min-height: 100vh;
+	background:
+		radial-gradient(ellipse 45% 55% at 50% -10%, color-mix(in srgb, var(--mp-accent) 38%, transparent), color-mix(in srgb, var(--mp-accent) 7%, transparent) 45%, transparent 70%),
+		var(--w-bg) !important;
+}
+html:not([data-mp-mode="dark"]) body.mp-brand[data-path="login"],
+html:not([data-mp-mode="dark"]) body.mp-brand[data-path="update-password"] {
+	background:
+		radial-gradient(ellipse 50% 50% at 50% -10%, color-mix(in srgb, var(--mp-accent) 28%, transparent), color-mix(in srgb, var(--mp-accent) 5%, transparent) 45%, transparent 70%),
+		var(--mp-bright-surface) !important;
+}
+
+/* clean, centred page: no website header/footer on the login screen */
+body.mp-brand[data-path="login"] .navbar,
+body.mp-brand[data-path="login"] .web-footer,
+body.mp-brand[data-path="login"] footer,
+body.mp-brand[data-path="update-password"] .navbar,
+body.mp-brand[data-path="update-password"] .web-footer,
+body.mp-brand[data-path="update-password"] footer {
+	display: none !important;
+}
+body.mp-brand[data-path="login"] .page-content-wrapper,
+body.mp-brand[data-path="login"] main,
+body.mp-brand[data-path="login"] .container,
+body.mp-brand[data-path="update-password"] main {
+	background: transparent !important;
+}
+body.mp-brand[data-path="login"] .for-login,
+body.mp-brand[data-path="login"] .for-forgot,
+body.mp-brand[data-path="login"] .for-signup,
+body.mp-brand[data-path="login"] .for-login-with-email-link,
+body.mp-brand[data-path="login"] .for-email-login {
+	padding-top: 9vh;
+}
+
+/* heading block: company logo + name + tagline */
+body.mp-brand[data-path="login"] .page-card-head {
+	text-align: center;
+	padding-bottom: 8px;
+}
+body.mp-brand[data-path="login"] .page-card-head .app-logo {
+	width: auto;
+	height: 48px;
+	max-width: 160px;
+	object-fit: contain;
+	filter: drop-shadow(0 0 22px color-mix(in srgb, var(--mp-accent) 45%, transparent));
+}
+/* no Logo for Bright Mode: show the (white) Dark/Company logo black on the light page */
+html:not(.mp-has-bright-logo):not([data-mp-mode="dark"]) body.mp-brand[data-path="login"] .page-card-head .app-logo {
+	filter: brightness(0);
+}
+html.mp-has-bright-logo:not([data-mp-mode="dark"]) body.mp-brand[data-path="login"] .page-card-head .app-logo {
+	filter: none;
+}
+/* the heading text comes from --mp-login-title (same for all companies); Frappe's "Login to <company>" is hidden */
+body.mp-brand[data-path="login"] .page-card-head h4 {
+	font-size: 0 !important;
+}
+body.mp-brand[data-path="login"] .page-card-head h4::before {
+	content: var(--mp-login-title, "Welcome back");
+	font-size: 30px;
+}
+body.mp-brand[data-path="login"] .page-card-head h4 {
+	margin-top: 18px;
+	font-weight: 500;
+	letter-spacing: -0.02em;
+	color: var(--w-heading);
+}
+html[dir="rtl"] body.mp-brand[data-path="login"] .page-card-head h4 {
+	letter-spacing: 0;
+}
+body.mp-brand[data-path="login"] .page-card-head::after {
+	content: var(--mp-tagline, "Employee portal & ERP");
+	display: block;
+	margin-top: 8px;
+	font-family: "Playfair Display", "IBM Plex Sans Arabic", Georgia, serif;
+	font-style: italic;
+	font-size: 20px;
+	color: var(--w-accent-text);
+}
+
+/* the card: glass */
+body.mp-brand[data-path="login"] .login-content.page-card,
+body.mp-brand[data-path="update-password"] .page-card {
+	max-width: 420px;
+	margin: 22px auto 0;
+	padding: 26px 26px 22px;
+	background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02)) !important;
+	border: 1px solid var(--w-border) !important;
+	border-radius: 22px;
+	box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
+	backdrop-filter: blur(18px);
+	-webkit-backdrop-filter: blur(18px);
+}
+html:not([data-mp-mode="dark"]) body.mp-brand[data-path="login"] .login-content.page-card,
+html:not([data-mp-mode="dark"]) body.mp-brand[data-path="update-password"] .page-card {
+	background: color-mix(in srgb, var(--mp-bright-bg) 88%, transparent) !important;
+	box-shadow: 0 24px 60px rgba(15, 23, 42, 0.08);
+}
+
+/* inputs */
+body.mp-brand[data-path="login"] .form-control,
+body.mp-brand[data-path="update-password"] .form-control {
+	height: 46px;
+	border-radius: 12px;
+	background: var(--w-surface-2) !important;
+	border: 1px solid var(--w-border) !important;
+	color: var(--w-heading) !important;
+	padding-inline-start: 40px;
+}
+html[data-mp-mode="dark"] body.mp-brand[data-path="login"] .form-control {
+	background: rgba(255, 255, 255, 0.04) !important;
+}
+body.mp-brand[data-path="login"] .form-control:focus,
+body.mp-brand[data-path="update-password"] .form-control:focus {
+	border-color: var(--w-accent-text) !important;
+	box-shadow: 0 0 0 3px color-mix(in srgb, var(--mp-accent) 15%, transparent) !important;
+}
+body.mp-brand[data-path="login"] .form-control::placeholder {
+	color: var(--w-muted);
+	opacity: 0.8;
+}
+body.mp-brand[data-path="login"] .field-icon,
+body.mp-brand[data-path="login"] .toggle-password {
+	color: var(--w-muted);
+	--icon-stroke: var(--w-muted);
+}
+html[data-mp-mode="dark"] body.mp-brand[data-path="login"] input:-webkit-autofill {
+	-webkit-box-shadow: 0 0 0 60px #111 inset !important;
+	-webkit-text-fill-color: #fff !important;
+}
+
+/* buttons: pill (white in Dark, black in Bright), accent on hover */
+body.mp-brand[data-path="login"] .btn-primary,
+body.mp-brand[data-path="update-password"] .btn-primary {
+	height: 46px;
+	border-radius: 999px;
+	font-weight: 600;
+	transition: background 0.15s;
+}
+body.mp-brand[data-path="login"] .btn-default,
+body.mp-brand[data-path="login"] .btn-login-option {
+	border-radius: 999px;
+	border: 1px solid var(--w-border) !important;
+	background: var(--w-surface-2) !important;
+	color: var(--w-heading) !important;
+}
+
+/* links & small text */
+body.mp-brand[data-path="login"] a,
+body.mp-brand[data-path="update-password"] a {
+	color: var(--w-link);
+}
+body.mp-brand[data-path="login"] .forgot-password-message a,
+body.mp-brand[data-path="login"] .sign-up-message,
+body.mp-brand[data-path="login"] .login-divider {
+	color: var(--w-muted);
+}
+body.mp-brand[data-path="login"] .login-divider::before,
+body.mp-brand[data-path="login"] .login-divider::after {
+	border-color: var(--w-border);
+}
+
+@media (max-width: 520px) {
+	body.mp-brand[data-path="login"] .login-content.page-card {
+		margin: 18px 14px 0;
+		padding: 22px 18px;
+	}
+	body.mp-brand[data-path="login"] .page-card-head h4::before {
+		font-size: 26px;
+	}
+	body.mp-brand[data-path="login"] .for-login {
+		padding-top: 72px;
+	}
+}
+
+/* field icons centred in the taller inputs; on the start side (left in English, right in Arabic) */
+body.mp-brand[data-path="login"] .field-icon {
+	top: 50% !important;
+	transform: translateY(-50%);
+}
+body.mp-brand[data-path="login"] .password-field .toggle-password {
+	top: 50% !important;
+	transform: translateY(-50%);
+}
+html[dir="rtl"] body.mp-brand[data-path="login"] .field-icon {
+	left: auto;
+	right: 9px;
+}
+html[dir="rtl"] body.mp-brand[data-path="login"] .password-field .toggle-password {
+	right: auto;
+	left: 12px;
+}

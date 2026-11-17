@@ -1,0 +1,152 @@
+{
+ "actions": [],
+ "creation": "2026-11-05 18:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "enabled",
+  "overtime_category",
+  "day_type",
+  "time_of_day",
+  "min_overtime_minutes",
+  "min_eligible_minutes",
+  "cb_1",
+  "calculation_method",
+  "multiplier",
+  "fixed_rate",
+  "rounding_method",
+  "max_hours_per_day",
+  "cb_2",
+  "overtime_type",
+  "is_statutory",
+  "legal_reference"
+ ],
+ "fields": [
+  {
+   "columns": 1,
+   "default": "1",
+   "fieldname": "enabled",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Enabled"
+  },
+  {
+   "columns": 2,
+   "fieldname": "overtime_category",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Overtime Category",
+   "reqd": 1
+  },
+  {
+   "columns": 1,
+   "fieldname": "day_type",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Applicable Day Type",
+   "options": "Working Day\nWeekly Off\nPublic Holiday",
+   "reqd": 1
+  },
+  {
+   "columns": 1,
+   "default": "Any",
+   "description": "Day/Night uses the Night Start/End times of the handbook.",
+   "fieldname": "time_of_day",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Time of Day",
+   "options": "Any\nDay\nNight"
+  },
+  {
+   "description": "Working-day only: the first N minutes after the shift are not overtime.",
+   "fieldname": "min_overtime_minutes",
+   "fieldtype": "Int",
+   "label": "Minimum Overtime Minutes (buffer)",
+   "non_negative": 1
+  },
+  {
+   "description": "If the counted overtime of this category is below this, it is ignored.",
+   "fieldname": "min_eligible_minutes",
+   "fieldtype": "Int",
+   "label": "Minimum Eligible Duration (minutes)",
+   "non_negative": 1
+  },
+  {
+   "fieldname": "cb_1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "columns": 2,
+   "default": "Hourly Rate Multiplier",
+   "fieldname": "calculation_method",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Calculation Method",
+   "options": "Hourly Rate Multiplier\nFixed Hourly Rate"
+  },
+  {
+   "columns": 1,
+   "depends_on": "eval:doc.calculation_method=='Hourly Rate Multiplier'",
+   "description": "Payable hours = overtime hours \u00d7 multiplier (e.g. 1.35 = hourly wage + 35%).",
+   "fieldname": "multiplier",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Multiplier",
+   "non_negative": 1
+  },
+  {
+   "depends_on": "eval:doc.calculation_method=='Fixed Hourly Rate'",
+   "fieldname": "fixed_rate",
+   "fieldtype": "Currency",
+   "label": "Fixed Hourly Rate"
+  },
+  {
+   "default": "No Rounding",
+   "fieldname": "rounding_method",
+   "fieldtype": "Select",
+   "label": "Rounding",
+   "options": "No Rounding\nDown to 15 Minutes\nDown to 30 Minutes\nDown to 60 Minutes\nNearest 15 Minutes\nNearest 30 Minutes"
+  },
+  {
+   "description": "0 = no cap",
+   "fieldname": "max_hours_per_day",
+   "fieldtype": "Float",
+   "label": "Max Hours per Day",
+   "non_negative": 1
+  },
+  {
+   "fieldname": "cb_2",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "overtime_type",
+   "fieldtype": "Link",
+   "label": "HRMS Overtime Type (payroll mapping)",
+   "options": "Overtime Type"
+  },
+  {
+   "description": "Tick when this rule implements a legal minimum, untick for a company benefit.",
+   "fieldname": "is_statutory",
+   "fieldtype": "Check",
+   "label": "Statutory Requirement"
+  },
+  {
+   "depends_on": "is_statutory",
+   "fieldname": "legal_reference",
+   "fieldtype": "Data",
+   "label": "Legal Reference"
+  }
+ ],
+ "istable": 1,
+ "links": [],
+ "modified": "2026-11-05 18:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Mobility HR",
+ "name": "Handbook Overtime Rule",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

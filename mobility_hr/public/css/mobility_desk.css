@@ -1,0 +1,293 @@
+/*
+ * Brand design for the ERPNext desk (/app). Colours/logo/name come from Brand Settings.
+ * Loaded through hooks.py → app_include_css. No build step needed (plain CSS).
+ * Active only when Brand Settings is enabled (html.mp-brand, see mobility/branding.py).
+ *
+ * How it works: Frappe's desk is styled with CSS variables (--bg-color, --text-color, --btn-primary …),
+ * defined for the light theme on :root and for the dark theme on html.mp-brand[data-theme="dark"].
+ * We override those variables, so every Frappe/ERPNext/HRMS screen picks up the brand without touching
+ * their code. The Dark theme becomes the full brand look (black, glass, accent colour, white pill
+ * buttons); the Light theme keeps white pages but gets the black brand navbar, fonts and accent.
+ */
+@import url("https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap");
+
+html.mp-brand {
+	/* defaults; the company theme overrides these (mobility_brand.js / Company Theme) */
+	--mp-accent: #29f2e8;
+	--mp-dark-bg: #000000;
+	--mp-dark-surface: #0b0b0b;
+	--mp-bright-bg: #ffffff;
+	--mp-bright-surface: #f6f7f8;
+	--mp-dark-2: color-mix(in srgb, var(--mp-dark-surface) 93%, #fff);
+	--mp-dark-3: color-mix(in srgb, var(--mp-dark-surface) 88%, #fff);
+	--mp-dark-4: color-mix(in srgb, var(--mp-dark-surface) 82%, #fff);
+	--mp-accent-soft: color-mix(in srgb, var(--mp-accent) 12%, transparent);
+	--mp-accent-ink: var(--mp-bright-accent, color-mix(in srgb, var(--mp-accent) 55%, #000)); /* readable accent on white */
+	--font-stack: "Figtree", "IBM Plex Sans Arabic", "InterVariable", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+/* ------------------------------------------------------------------ dark theme: brand navbar */
+html.mp-brand[data-theme="dark"] .navbar {
+	background: color-mix(in srgb, var(--mp-dark-bg) 86%, transparent) !important;
+	backdrop-filter: blur(16px);
+	-webkit-backdrop-filter: blur(16px);
+	border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+	/* everything inside the navbar (search, dropdowns, notifications) uses dark values */
+	--text-color: #f5f5f5;
+	--heading-color: #fff;
+	--text-muted: #a3a3a3;
+	--text-light: #cfcfcf;
+	--icon-stroke: #d4d4d4;
+	--bg-color: var(--mp-dark-surface);
+	--fg-color: var(--mp-dark-surface);
+	--fg-hover-color: var(--mp-dark-3);
+	--subtle-fg: var(--mp-dark-3);
+	--subtle-accent: var(--mp-dark-3);
+	--control-bg: rgba(255, 255, 255, 0.07);
+	--awesomebar-focus-bg: var(--mp-dark-3);
+	--awesomplete-hover-bg: var(--mp-dark-3);
+	--border-color: rgba(255, 255, 255, 0.1);
+	--dark-border-color: rgba(255, 255, 255, 0.16);
+	--popover-bg: var(--mp-dark-surface);
+	--modal-bg: var(--mp-dark-surface);
+	--placeholder-color: #8a8a8a;
+}
+html.mp-brand .navbar::after {
+	content: "";
+	position: absolute;
+	left: 15%;
+	right: 15%;
+	bottom: -1px;
+	height: 1px;
+	background: linear-gradient(90deg, transparent, var(--mp-accent), transparent);
+	opacity: 0.55;
+	pointer-events: none;
+}
+html.mp-brand .navbar .navbar-brand .app-logo {
+	height: 24px; /* fixed height: SVGs without width/height would otherwise collapse to 0 */
+	max-height: 24px;
+	width: auto;
+	max-width: 160px;
+	object-fit: contain;
+}
+html.mp-brand .navbar .search-bar .awesomplete input {
+	border-radius: 999px;
+}
+html.mp-brand[data-theme="dark"] .navbar .dropdown-menu {
+	border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* ------------------------------------------------------------------ light theme: same brand, light surfaces
+ * White glass navbar, Figtree, black pill buttons, accent used as a darker "ink" so it stays readable on
+ * white. Frappe's own light colours are kept for pages, forms and lists. */
+html.mp-brand[data-theme="light"] {
+	/* the accent darkened for text/lines on white (works for any accent colour) */
+	--mp-accent-ink: var(--mp-bright-accent, color-mix(in srgb, var(--mp-accent) 55%, #000));
+	--primary: var(--mp-accent-ink);
+	--sidebar-select-color: color-mix(in srgb, var(--mp-accent) 16%, #fff);
+	--bg-color: var(--mp-bright-surface);
+}
+html.mp-brand[data-theme="light"] .navbar {
+	background: color-mix(in srgb, var(--mp-bright-bg) 82%, transparent) !important;
+	backdrop-filter: blur(16px);
+	-webkit-backdrop-filter: blur(16px);
+	border-bottom: 1px solid rgba(0, 0, 0, 0.07) !important;
+	box-shadow: 0 1px 0 rgba(0, 0, 0, 0.02);
+}
+html.mp-brand[data-theme="light"] .navbar::after {
+	background: linear-gradient(90deg, transparent, var(--mp-accent-ink), transparent);
+	opacity: 0.35;
+}
+/* logos per mode (Company Theme › Logo for Bright / Dark Mode, see branding.logo_html) */
+html:not([data-mp-mode="dark"]) .mp-logo-dark,
+html[data-mp-mode="dark"] .mp-logo-bright {
+	display: none !important;
+}
+/* no Bright logo: the Dark/Company logo (usually white) is shown black on light backgrounds */
+html:not([data-mp-mode="dark"]) .mp-logo-auto,
+html.mp-brand:not(.mp-has-bright-logo)[data-theme="light"] .navbar .navbar-brand .app-logo {
+	filter: brightness(0) !important;
+}
+html.mp-brand[data-theme="light"] .btn.btn-primary {
+	border-radius: 999px;
+	font-weight: 600;
+}
+html.mp-brand[data-theme="light"] .btn.btn-primary:hover {
+	background-color: var(--mp-accent-ink);
+	color: #fff;
+}
+html.mp-brand[data-theme="light"] .page-head .btn,
+html.mp-brand[data-theme="light"] .page-actions .btn {
+	border-radius: 999px;
+}
+html.mp-brand[data-theme="light"] .standard-sidebar-item.selected,
+html.mp-brand[data-theme="light"] .sidebar-item-container .selected {
+	box-shadow: inset 3px 0 0 var(--mp-accent-ink);
+}
+html.mp-brand[data-theme="light"] .standard-sidebar-item.selected .sidebar-item-label,
+html.mp-brand[data-theme="light"] .form-tabs .nav-link.active {
+	color: var(--mp-accent-ink) !important;
+}
+html.mp-brand[data-theme="light"] .form-tabs .nav-link.active {
+	box-shadow: inset 0 -2px 0 var(--mp-accent-ink);
+}
+html.mp-brand[data-theme="light"] .form-control:focus,
+html.mp-brand[data-theme="light"] .awesomplete input:focus {
+	box-shadow: 0 0 0 2px color-mix(in srgb, var(--mp-accent) 30%, transparent) !important;
+}
+html.mp-brand[data-theme="light"] .btn.btn-primary-light,
+html.mp-brand[data-theme="light"] .btn-primary-light {
+	background: color-mix(in srgb, var(--mp-accent) 14%, #fff) !important;
+	color: var(--mp-accent-ink) !important;
+}
+html.mp-brand[data-theme="light"] .frappe-card,
+html.mp-brand[data-theme="light"] .widget,
+html.mp-brand[data-theme="light"] .layout-main-section .frappe-list,
+html.mp-brand[data-theme="light"] .form-page {
+	border-radius: 16px;
+}
+
+/* ------------------------------------------------------------------ dark theme: full brand */
+html.mp-brand[data-theme="dark"] {
+	--bg-color: var(--mp-dark-bg);
+	--fg-color: var(--mp-dark-surface);
+	--card-bg: var(--mp-dark-surface);
+	--modal-bg: var(--mp-dark-surface);
+	--toast-bg: var(--mp-dark-2);
+	--popover-bg: var(--mp-dark-surface);
+	--navbar-bg: color-mix(in srgb, var(--mp-dark-bg) 86%, transparent);
+	--subtle-fg: var(--mp-dark-2);
+	--subtle-accent: var(--mp-dark-3);
+	--fg-hover-color: var(--mp-dark-2);
+	--control-bg: var(--mp-dark-2);
+	--control-bg-on-gray: var(--mp-dark-3);
+	--disabled-control-bg: var(--mp-dark-surface);
+	--awesomebar-focus-bg: var(--mp-dark-3);
+	--awesomplete-hover-bg: var(--mp-dark-3);
+	--border-color: rgba(255, 255, 255, 0.09);
+	--dark-border-color: rgba(255, 255, 255, 0.16);
+	--table-border-color: rgba(255, 255, 255, 0.08);
+	--btn-default-bg: var(--mp-dark-3);
+	--btn-default-hover-bg: var(--mp-dark-4);
+	--btn-primary: #ffffff;
+	--primary: var(--mp-accent);
+	--primary-color: var(--mp-accent);
+	--sidebar-select-color: var(--mp-accent-soft);
+	--text-muted: #a3a3a3;
+	--text-light: #cfcfcf;
+	--highlight-color: var(--mp-dark-3);
+	--scrollbar-thumb-color: var(--mp-dark-4);
+	--scrollbar-track-color: var(--mp-dark-surface);
+	--checkbox-color: var(--mp-accent);
+	--shadow-base: none;
+	--card-shadow: none;
+	--highlight-shadow: 0 0 0 1px color-mix(in srgb, var(--mp-accent) 35%, transparent);
+}
+html.mp-brand[data-theme="dark"] body {
+	background:
+		radial-gradient(ellipse 50% 320px at 50% -120px, color-mix(in srgb, var(--mp-accent) 22%, transparent), transparent 70%) fixed,
+		var(--mp-dark-bg);
+}
+html.mp-brand[data-theme="dark"] .page-container,
+html.mp-brand[data-theme="dark"] .main-section,
+html.mp-brand[data-theme="dark"] .page-head,
+html.mp-brand[data-theme="dark"] .page-head .page-head-content {
+	background: transparent;
+}
+html.mp-brand[data-theme="dark"] .page-head {
+	backdrop-filter: blur(14px);
+	-webkit-backdrop-filter: blur(14px);
+	background: color-mix(in srgb, var(--mp-dark-bg) 55%, transparent);
+}
+
+/* buttons: white pills, accent colour on hover */
+html.mp-brand[data-theme="dark"] .btn.btn-primary {
+	background: #fff;
+	color: #000;
+	border-radius: 999px;
+	font-weight: 600;
+}
+html.mp-brand[data-theme="dark"] .btn.btn-primary:hover,
+html.mp-brand[data-theme="dark"] .btn.btn-primary:focus {
+	background: var(--mp-accent);
+	color: #000;
+}
+html.mp-brand[data-theme="dark"] .page-head .btn,
+html.mp-brand[data-theme="dark"] .page-actions .btn {
+	border-radius: 999px;
+}
+html.mp-brand[data-theme="dark"] .btn.btn-default {
+	border: 1px solid rgba(255, 255, 255, 0.12);
+}
+html.mp-brand[data-theme="dark"] .btn.btn-default:hover {
+	border-color: var(--mp-accent);
+}
+
+/* cards, forms, lists: dark glass */
+html.mp-brand[data-theme="dark"] .frappe-card,
+html.mp-brand[data-theme="dark"] .form-page,
+html.mp-brand[data-theme="dark"] .layout-main-section .frappe-list,
+html.mp-brand[data-theme="dark"] .widget,
+html.mp-brand[data-theme="dark"] .form-dashboard-section,
+html.mp-brand[data-theme="dark"] .report-wrapper {
+	background: linear-gradient(180deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.015));
+	border: 1px solid rgba(255, 255, 255, 0.09);
+	border-radius: 16px;
+}
+html.mp-brand[data-theme="dark"] .form-control,
+html.mp-brand[data-theme="dark"] .awesomplete input {
+	border: 1px solid transparent;
+}
+html.mp-brand[data-theme="dark"] .form-control:focus,
+html.mp-brand[data-theme="dark"] .awesomplete input:focus {
+	border-color: var(--mp-accent) !important;
+	box-shadow: 0 0 0 2px color-mix(in srgb, var(--mp-accent) 15%, transparent) !important;
+}
+
+/* links & active states in cyan */
+html.mp-brand[data-theme="dark"] a:not(.btn):not(.dropdown-item):not(.item-anchor):hover {
+	color: var(--mp-accent);
+}
+html.mp-brand[data-theme="dark"] .standard-sidebar-item.selected,
+html.mp-brand[data-theme="dark"] .sidebar-item-container .selected,
+html.mp-brand[data-theme="dark"] .standard-sidebar-item.selected .sidebar-item-label {
+	color: var(--mp-accent) !important;
+}
+html.mp-brand[data-theme="dark"] .form-tabs .nav-link.active {
+	color: #fff;
+	box-shadow: inset 0 -2px 0 var(--mp-accent);
+}
+html.mp-brand[data-theme="dark"] .indicator-pill.blue,
+html.mp-brand[data-theme="dark"] .indicator-pill.cyan {
+	background: var(--mp-accent-soft);
+	color: var(--mp-accent);
+}
+
+/* headings & numbers */
+html.mp-brand .page-title .title-text,
+html.mp-brand .widget .widget-title,
+html.mp-brand .ce-header {
+	letter-spacing: -0.01em;
+}
+html.mp-brand[data-theme="dark"] .number-card .widget-content .number {
+	color: var(--mp-accent);
+}
+
+/* "light primary" buttons (active Filters, Sort …) */
+html.mp-brand[data-theme="dark"] .btn.btn-primary-light,
+html.mp-brand[data-theme="dark"] .btn-primary-light {
+	background: var(--mp-accent-soft) !important;
+	color: var(--mp-accent) !important;
+	border: 1px solid color-mix(in srgb, var(--mp-accent) 25%, transparent);
+}
+html.mp-brand[data-theme="dark"] .btn-primary-light .filter-label,
+html.mp-brand[data-theme="dark"] .btn-primary-light svg {
+	color: var(--mp-accent);
+	--icon-stroke: var(--mp-accent);
+}
+
+/* ------------------------------------------------------------------ right-to-left (Arabic) */
+html.mp-brand[dir="rtl"][data-theme="light"] .standard-sidebar-item.selected,
+html.mp-brand[dir="rtl"][data-theme="light"] .sidebar-item-container .selected {
+	box-shadow: inset -3px 0 0 var(--mp-accent-ink);
+}

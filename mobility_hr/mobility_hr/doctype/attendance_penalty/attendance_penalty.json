@@ -1,0 +1,277 @@
+{
+ "actions": [],
+ "autoname": "naming_series:",
+ "creation": "2026-11-05 18:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "naming_series",
+  "employee",
+  "employee_name",
+  "company",
+  "handbook",
+  "cb_1",
+  "frequency",
+  "period_start",
+  "period_end",
+  "total_late_minutes",
+  "penalty_section",
+  "rule_name",
+  "penalty_type",
+  "penalty_value",
+  "deduction_unit",
+  "cb_2",
+  "leave_type",
+  "leave_days_deducted",
+  "leave_allocation",
+  "deduction_status",
+  "explanation_section",
+  "explanation",
+  "details",
+  "rule_snapshot",
+  "penalty_key",
+  "amended_from"
+ ],
+ "fields": [
+  {
+   "default": "ATT-PEN-.YYYY.-",
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "hidden": 1,
+   "label": "Series",
+   "options": "ATT-PEN-.YYYY.-",
+   "reqd": 1
+  },
+  {
+   "fieldname": "employee",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Employee",
+   "options": "Employee",
+   "reqd": 1,
+   "search_index": 1
+  },
+  {
+   "fetch_from": "employee.employee_name",
+   "fieldname": "employee_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Employee Name",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "employee.company",
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "label": "Company",
+   "options": "Company",
+   "read_only": 1
+  },
+  {
+   "fieldname": "handbook",
+   "fieldtype": "Link",
+   "label": "HR Handbook",
+   "options": "HR Handbook",
+   "read_only": 1
+  },
+  {
+   "fieldname": "cb_1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "frequency",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Frequency",
+   "options": "Daily\nWeekly\nMonthly",
+   "read_only": 1
+  },
+  {
+   "fieldname": "period_start",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Period Start",
+   "read_only": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "period_end",
+   "fieldtype": "Date",
+   "label": "Period End",
+   "read_only": 1
+  },
+  {
+   "fieldname": "total_late_minutes",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "Counted Late Minutes",
+   "read_only": 1
+  },
+  {
+   "fieldname": "penalty_section",
+   "fieldtype": "Section Break",
+   "label": "Penalty"
+  },
+  {
+   "fieldname": "rule_name",
+   "fieldtype": "Data",
+   "label": "Rule",
+   "read_only": 1
+  },
+  {
+   "fieldname": "penalty_type",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Penalty Type",
+   "read_only": 1
+  },
+  {
+   "fieldname": "penalty_value",
+   "fieldtype": "Float",
+   "label": "Penalty Value",
+   "read_only": 1
+  },
+  {
+   "fieldname": "deduction_unit",
+   "fieldtype": "Data",
+   "label": "Deduction Unit",
+   "read_only": 1
+  },
+  {
+   "fieldname": "cb_2",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "leave_type",
+   "fieldtype": "Link",
+   "label": "Leave Type",
+   "options": "Leave Type",
+   "read_only": 1
+  },
+  {
+   "fieldname": "leave_days_deducted",
+   "fieldtype": "Float",
+   "label": "Leave Days Deducted",
+   "no_copy": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "leave_allocation",
+   "fieldtype": "Link",
+   "label": "Leave Allocation",
+   "no_copy": 1,
+   "options": "Leave Allocation",
+   "read_only": 1
+  },
+  {
+   "fieldname": "deduction_status",
+   "fieldtype": "Data",
+   "label": "Deduction Status",
+   "no_copy": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "explanation_section",
+   "fieldtype": "Section Break",
+   "label": "How it was calculated"
+  },
+  {
+   "fieldname": "explanation",
+   "fieldtype": "Small Text",
+   "label": "Explanation",
+   "read_only": 1
+  },
+  {
+   "fieldname": "details",
+   "fieldtype": "Table",
+   "label": "Days",
+   "options": "Attendance Penalty Detail",
+   "read_only": 1
+  },
+  {
+   "fieldname": "rule_snapshot",
+   "fieldtype": "Code",
+   "label": "Rule Snapshot",
+   "options": "JSON",
+   "read_only": 1
+  },
+  {
+   "fieldname": "penalty_key",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "Penalty Key",
+   "read_only": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Attendance Penalty",
+   "print_hide": 1,
+   "read_only": 1
+  }
+ ],
+ "is_submittable": 1,
+ "links": [],
+ "modified": "2026-11-05 18:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Mobility HR",
+ "name": "Attendance Penalty",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "amend": 1,
+   "cancel": 1,
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  },
+  {
+   "amend": 1,
+   "cancel": 1,
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "HR Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "HR User",
+   "submit": 1,
+   "write": 1
+  },
+  {
+   "print": 1,
+   "read": 1,
+   "role": "Employee"
+  }
+ ],
+ "sort_field": "period_start",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "employee_name",
+ "track_changes": 1
+}

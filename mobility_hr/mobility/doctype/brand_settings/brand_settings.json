@@ -1,0 +1,88 @@
+{
+ "actions": [],
+ "creation": "2026-11-08 12:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "enabled",
+  "brand_company",
+  "tagline",
+  "cb_1",
+  "logo",
+  "accent_color",
+  "note_section",
+  "note"
+ ],
+ "fields": [
+  {
+   "default": "0",
+   "description": "Dark brand design for the desk, login page, website and employee portal.",
+   "fieldname": "enabled",
+   "fieldtype": "Check",
+   "label": "Enable Brand Design"
+  },
+  {
+   "description": "Shown on the login page and to website visitors who are not logged in. Logged-in users see their own company. Empty = the default company.",
+   "fieldname": "brand_company",
+   "fieldtype": "Link",
+   "label": "Login & Website Company",
+   "options": "Company"
+  },
+  {
+   "default": "Employee portal & ERP",
+   "description": "Italic line under the login heading.",
+   "fieldname": "tagline",
+   "fieldtype": "Data",
+   "label": "Login Tagline"
+  },
+  {
+   "fieldname": "cb_1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "description": "Only used for a company that has no Company Logo. Leave empty to show the company's initials instead.",
+   "fieldname": "logo",
+   "fieldtype": "Attach Image",
+   "label": "Fallback Logo"
+  },
+  {
+   "default": "#29f2e8",
+   "description": "For companies without a Company Theme.",
+   "fieldname": "accent_color",
+   "fieldtype": "Color",
+   "label": "Default Accent Color"
+  },
+  {
+   "fieldname": "note_section",
+   "fieldtype": "Section Break",
+   "label": "How names and logos are chosen"
+  },
+  {
+   "fieldname": "note",
+   "fieldtype": "HTML",
+   "options": "<p class='text-muted small'><b>Themes:</b> one <a href='/app/company-theme'>Company Theme</a> per company (accent, colours and logos for Bright and Dark mode). <b>Logo:</b> the Company Theme's Bright / Dark logo, else the Company's own <b>Company Logo</b>, else the fallback logo below. <b>Mode:</b> Bright by default; each person switches with the toggle on the login page (saved in their browser). <b>Company:</b> logged-in users see their own company (from their Employee record) in the desk, website and portal; the login page and visitors who are not logged in see the <b>Login &amp; Website Company</b>.</p>"
+  }
+ ],
+ "issingle": 1,
+ "links": [],
+ "modified": "2026-11-17 18:30:00.000000",
+ "modified_by": "Administrator",
+ "module": "Mobility",
+ "name": "Brand Settings",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "read": 1,
+   "role": "System Manager",
+   "write": 1
+  },
+  {
+   "read": 1,
+   "role": "HR Manager"
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

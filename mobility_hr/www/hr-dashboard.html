@@ -1,0 +1,972 @@
+<!doctype html>
+<html lang="{{ lang }}" dir="{{ 'rtl' if rtl else 'ltr' }}" class="mp-brand" data-mp-mode="bright">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#ffffff">
+{{ mode_script }}
+<title>{{ _("Employee Portal") }} · {{ brand.name }}</title>
+{% if brand.logo %}<link rel="icon" href="{{ brand.logo }}">{% endif %}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Geist+Mono:wght@400;500&family=Playfair+Display:ital,wght@1,500;1,600&display=swap" rel="stylesheet">
+<style>
+:root {
+	/* Dark mode; company colours (--mp-*) come from Company Theme via brand_style */
+	--accent: #29f2e8; --accent-soft: color-mix(in srgb, var(--accent) 12%, transparent); --accent-text: var(--accent);
+	--bg: var(--mp-dark-bg, #000); --solid: color-mix(in srgb, var(--mp-dark-surface, #0b0b0b) 92%, #fff);
+	--surface: rgba(255,255,255,.04); --surface-2: rgba(255,255,255,.07);
+	--border: rgba(255,255,255,.10); --border-2: rgba(255,255,255,.18);
+	--text: #fff; --muted: #a3a3a3; --faint: #6b6b6b;
+	--nav-bg: color-mix(in srgb, var(--mp-dark-surface, #0b0b0b) 72%, transparent);
+	--nav-bg-strong: color-mix(in srgb, var(--mp-dark-surface, #0b0b0b) 88%, transparent);
+	--pop-bg: color-mix(in srgb, var(--mp-dark-surface, #0b0b0b) 96%, transparent);
+	--card-bg: linear-gradient(180deg, rgba(255,255,255,.055), rgba(255,255,255,.02));
+	--field-bg: rgba(255,255,255,.03);
+	--btn-bg: #fff; --btn-fg: #000; --btn-hover-bg: var(--accent); --btn-hover-fg: #000;
+	--shadow: 0 24px 70px rgba(0,0,0,.7); --glow-strength: 38%;
+	--ok: #3ddc97; --ok-soft: rgba(61,220,151,.13); --warn: #f5b84a; --warn-soft: rgba(245,184,74,.13);
+	--bad: #ff6b6b; --bad-soft: rgba(255,107,107,.13); --info: #5aa9ff; --info-soft: rgba(90,169,255,.13);
+	--radius: 18px; --pill: 999px;
+	--sans: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+	--serif: "Playfair Display", Georgia, serif; --mono: "Geist Mono", ui-monospace, monospace;
+	--nav-h: 64px; --tab-h: 68px;
+}
+/* Bright mode (default) */
+html[data-mp-mode="bright"] {
+	--accent-text: var(--mp-bright-accent, color-mix(in srgb, var(--accent) 55%, #000));
+	--accent-soft: color-mix(in srgb, var(--accent) 16%, transparent);
+	--bg: var(--mp-bright-surface, #f6f7f8); --solid: var(--mp-bright-bg, #fff);
+	--surface: var(--mp-bright-bg, #fff); --surface-2: rgba(0,0,0,.05);
+	--border: rgba(0,0,0,.09); --border-2: rgba(0,0,0,.16);
+	--text: #111; --muted: #5f6368; --faint: #8a8f98;
+	--nav-bg: color-mix(in srgb, var(--mp-bright-bg, #fff) 80%, transparent);
+	--nav-bg-strong: color-mix(in srgb, var(--mp-bright-bg, #fff) 92%, transparent);
+	--pop-bg: var(--mp-bright-bg, #fff);
+	--card-bg: var(--mp-bright-bg, #fff);
+	--field-bg: var(--mp-bright-bg, #fff);
+	--btn-bg: #0a0a0a; --btn-fg: #fff; --btn-hover-bg: var(--accent-text); --btn-hover-fg: #fff;
+	--shadow: 0 24px 60px rgba(15,23,42,.14); --glow-strength: 26%;
+	--ok: #12805c; --ok-soft: rgba(18,128,92,.11); --warn: #a15c00; --warn-soft: rgba(214,137,16,.14);
+	--bad: #c92a2a; --bad-soft: rgba(201,42,42,.10); --info: #1d63c9; --info-soft: rgba(29,99,201,.10);
+	color-scheme: light;
+}
+html[data-mp-mode="dark"] { color-scheme: dark; }
+html:not([data-mp-mode="dark"]) .mp-logo-dark, html[data-mp-mode="dark"] .mp-logo-bright { display: none !important; }
+html:not([data-mp-mode="dark"]) .mp-logo-auto { filter: brightness(0); }
+html[data-mp-mode="bright"] .card { box-shadow: 0 1px 2px rgba(15,23,42,.04); }
+html[dir="rtl"] { --sans: "IBM Plex Sans Arabic", "Figtree", system-ui, sans-serif; }
+html[dir="rtl"] .brand b, html[dir="rtl"] .brand small, html[dir="rtl"] h1, html[dir="rtl"] h2 { letter-spacing: 0; }
+html[dir="rtl"] .period button, html[dir="rtl"] .brand-chev { transform: scaleX(-1); }
+* { box-sizing: border-box; }
+html, body { margin: 0; background: var(--bg); color: var(--text); font-family: var(--sans); -webkit-font-smoothing: antialiased; }
+body { min-height: 100vh; overflow-x: hidden; }
+a { color: var(--accent-text); text-decoration: none; }
+button, input, select, textarea { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+[hidden] { display: none !important; }
+.glow { position: fixed; inset: -30vh 0 auto 0; height: 70vh; pointer-events: none; z-index: 0;
+	background: radial-gradient(ellipse 45% 55% at 50% 0%, color-mix(in srgb, var(--accent) var(--glow-strength), transparent), color-mix(in srgb, var(--accent) 8%, transparent) 45%, transparent 70%); }
+.wrap { position: relative; z-index: 1; max-width: 1180px; margin: 0 auto; padding: 16px 20px 120px; }
+
+/* nav */
+.nav { position: sticky; top: 14px; z-index: 20; display: flex; align-items: center; gap: 18px; height: var(--nav-h);
+	padding-inline: 18px 10px; border: 1px solid var(--border); border-radius: var(--pill);
+	background: var(--nav-bg); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); }
+.brand-wrap { position: relative; }
+.brand { display: flex; align-items: center; gap: 10px; color: var(--text); white-space: nowrap; border: 0; background: none; padding-block: 6px; padding-inline: 4px 10px;
+	border-radius: var(--pill); cursor: pointer; text-align: start; }
+.brand:disabled { cursor: default; }
+.brand:not(:disabled):hover, .brand[aria-expanded="true"] { background: var(--surface-2); }
+.brand-logo { display: grid; place-items: center; min-width: 30px; height: 28px; }
+.brand-logo img { height: 28px; width: auto; max-width: 110px; object-fit: contain; }
+.brand-logo .initials { width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; font-size: 12px; font-weight: 700;
+	background: var(--accent-soft); color: var(--accent-text); }
+.brand b { display: block; font-weight: 600; letter-spacing: .24em; font-size: 13px; line-height: 1; max-width: 220px; overflow: hidden; text-overflow: ellipsis; }
+.brand small { display: block; letter-spacing: .26em; font-size: 9px; color: var(--muted); margin-top: 4px; }
+.brand-chev { color: var(--muted); transition: transform .2s; }
+.brand[aria-expanded="true"] .brand-chev { transform: rotate(180deg); color: var(--accent-text); }
+.company-pop { inset-inline-start: 0; inset-inline-end: auto; width: 320px; }
+.pk-avatar img { width: 100%; height: 100%; object-fit: contain; border-radius: 50%; padding: 4px; }
+.tabs { display: flex; gap: 4px; margin: 0 auto; }
+.tab { border: 0; background: transparent; color: var(--muted); font-weight: 500; font-size: 15px; padding: 9px 16px; border-radius: var(--pill); cursor: pointer; }
+.tab:hover { color: var(--text); }
+.tab[aria-selected="true"] { color: var(--text); background: var(--surface-2); }
+.menu-sep { height: 1px; margin: 6px 4px; background: var(--border); }
+.menu #mode-toggle, .menu #lang-toggle { display: flex; align-items: center; gap: 10px; }
+.menu #mode-toggle svg { width: 16px; height: 16px; flex: none; }
+.nav-right { display: flex; align-items: center; gap: 8px; }
+/* employee picker (HR) */
+.picker { position: relative; }
+.hr-pick { display: flex; align-items: center; gap: 10px; width: 240px; height: 42px; padding: 0 14px 0 5px; border-radius: var(--pill);
+	border: 1px solid var(--border); background: var(--surface); cursor: pointer; text-align: left; }
+.hr-pick:hover, .hr-pick[aria-expanded="true"] { border-color: color-mix(in srgb, var(--accent) 50%, transparent); background: var(--surface-2); }
+.pk-avatar { flex: 0 0 32px; width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center; font-size: 12px; font-weight: 700;
+	background: var(--accent-soft); color: var(--accent-text); }
+.pk-avatar.me { background: var(--btn-bg); color: var(--btn-fg); }
+.pk-avatar.none { background: var(--surface-2); color: var(--muted); }
+.pk-label { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 600; font-size: 14px; }
+.pk-chev { color: var(--muted); transition: transform .2s; }
+.hr-pick[aria-expanded="true"] .pk-chev { transform: rotate(180deg); color: var(--accent-text); }
+.picker-pop { position: absolute; inset-inline-end: 0; top: calc(100% + 10px); width: 340px; max-height: min(460px, 70vh); display: flex; flex-direction: column;
+	border: 1px solid var(--border-2); border-radius: 18px; background: var(--pop-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+	box-shadow: var(--shadow), 0 0 0 1px color-mix(in srgb, var(--accent) 6%, transparent); overflow: hidden; z-index: 40; animation: pkIn .14s ease-out; }
+@keyframes pkIn { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: none; } }
+.pk-search { display: flex; align-items: center; gap: 10px; padding: 12px 14px; border-bottom: 1px solid var(--border); color: var(--muted); }
+.pk-search input { flex: 1; border: 0; background: none; outline: none; color: var(--text); font-size: 14px; }
+.pk-search input::placeholder { color: var(--faint); }
+.pk-search input::-webkit-search-cancel-button { filter: invert(1); }
+.pk-list { overflow-y: auto; padding: 6px; scrollbar-width: thin; scrollbar-color: var(--border-2) transparent; }
+.pk-section { padding: 10px 10px 4px; font-family: var(--mono); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--faint); }
+.pk-item { display: flex; align-items: center; gap: 12px; width: 100%; padding: 8px 10px; border: 0; border-radius: 12px; background: none; cursor: pointer; text-align: start; }
+.pk-item:hover, .pk-item.active { background: var(--surface-2); }
+.pk-item[aria-selected="true"] { background: var(--accent-soft); }
+.pk-item .pk-text { flex: 1; min-width: 0; }
+.pk-item .pk-name { display: block; font-weight: 600; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pk-item .pk-sub { display: block; font-family: var(--mono); font-size: 11px; color: var(--muted); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pk-item mark { background: none; color: var(--accent-text); }
+.pk-check { color: var(--accent-text); visibility: hidden; }
+.pk-item[aria-selected="true"] .pk-check { visibility: visible; }
+.pk-empty { padding: 26px 12px; text-align: center; color: var(--muted); font-size: 14px; }
+.pk-backdrop { display: none; }
+.avatar { width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--border-2); background: var(--surface-2);
+	display: grid; place-items: center; font-weight: 600; cursor: pointer; }
+.menu { position: absolute; inset-inline-end: 8px; top: calc(var(--nav-h) + 8px); min-width: 220px; padding: 8px; border-radius: 14px;
+	border: 1px solid var(--border); background: var(--solid); display: none; }
+.menu.open { display: block; }
+.menu .who { padding: 8px 10px 10px; border-bottom: 1px solid var(--border); margin-bottom: 6px; font-size: 14px; }
+.menu .who small { display: block; color: var(--muted); }
+.menu a, .menu button { display: block; width: 100%; text-align: start; padding: 9px 10px; border-radius: 10px; border: 0; background: none; color: var(--text); cursor: pointer; font-size: 14px; }
+.menu a:hover, .menu button:hover { background: var(--surface-2); }
+
+/* hero */
+.hero { text-align: center; padding: 56px 0 28px; }
+.eyebrow { font-family: var(--mono); font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+html[dir="rtl"] .eyebrow { font-family: var(--sans); font-size: 13px; letter-spacing: 0; }
+.hero h1 { margin: 10px 0 6px; font-size: clamp(34px, 6vw, 60px); line-height: 1.05; font-weight: 500; letter-spacing: -.02em; }
+.hero h1 em { font-family: var(--serif); font-style: italic; font-weight: 500; color: var(--accent-text); }
+.hero p { color: var(--muted); margin: 8px 0 0; font-size: 16px; }
+.period { display: inline-flex; align-items: center; gap: 6px; margin-top: 22px; padding: 6px; border-radius: var(--pill); border: 1px solid var(--border); background: var(--surface); }
+.period button { width: 36px; height: 36px; border-radius: 50%; border: 0; background: var(--surface-2); cursor: pointer; font-size: 18px; }
+.period button:hover { background: var(--accent-soft); color: var(--accent-text); }
+.period span { min-width: 150px; text-align: center; font-weight: 600; }
+.period small { display: block; font-family: var(--mono); font-size: 11px; color: var(--muted); font-weight: 400; }
+
+/* buttons */
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 44px; padding: 0 20px; border-radius: var(--pill);
+	border: 1px solid var(--border-2); background: var(--surface); color: var(--text); font-weight: 600; cursor: pointer; white-space: nowrap; }
+.btn:hover { border-color: var(--accent); }
+.btn.primary { background: var(--btn-bg); color: var(--btn-fg); border-color: var(--btn-bg); }
+.btn.primary:hover { background: var(--btn-hover-bg); border-color: var(--btn-hover-bg); color: var(--btn-hover-fg); }
+.btn.sm { height: 34px; padding: 0 14px; font-size: 13px; }
+.btn:disabled { opacity: .5; cursor: default; }
+.actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin: 26px 0 8px; }
+
+/* cards */
+.section { margin-top: 34px; }
+.section-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
+.section-head h2 { margin: 0; font-size: 22px; font-weight: 600; letter-spacing: -.01em; }
+.section-head h2 em { font-family: var(--serif); font-style: italic; color: var(--accent-text); font-weight: 500; }
+.card { border: 1px solid var(--border); border-radius: var(--radius); background: var(--card-bg); }
+.stats { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 12px; }
+.stat { padding: 18px; }
+.stat .label { font-size: 13px; color: var(--muted); }
+.stat .value { font-size: 34px; font-weight: 600; margin-top: 8px; line-height: 1; font-variant-numeric: tabular-nums; letter-spacing: -.02em; }
+.stat .value small { font-size: 15px; color: var(--muted); font-weight: 500; letter-spacing: 0; }
+.stat .sub { font-family: var(--mono); font-size: 11px; color: var(--muted); margin-top: 8px; }
+.stat.accent .value { color: var(--accent-text); }
+.today { display: flex; flex-wrap: wrap; gap: 14px 28px; align-items: center; padding: 18px 22px; margin-top: 18px; }
+.today .k { font-family: var(--mono); font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .1em; }
+.today .v { font-size: 18px; font-weight: 600; margin-top: 2px; }
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+/* pills */
+.pill { display: inline-flex; align-items: center; gap: 6px; height: 24px; padding: 0 10px; border-radius: var(--pill); font-size: 12px; font-weight: 600; white-space: nowrap;
+	background: var(--surface-2); color: var(--muted); }
+.pill::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+.pill.ok { background: var(--ok-soft); color: var(--ok); } .pill.bad { background: var(--bad-soft); color: var(--bad); }
+.pill.warn { background: var(--warn-soft); color: var(--warn); } .pill.info { background: var(--info-soft); color: var(--info); }
+.pill.accent { background: var(--accent-soft); color: var(--accent-text); }
+
+/* list rows */
+.list { padding: 6px; }
+.row { display: flex; align-items: center; gap: 14px; padding: 12px 14px; }
+.row + .row { border-top: 1px solid var(--border); }
+.row .main { flex: 1; min-width: 0; }
+.row .t { font-weight: 600; }
+.row .s { font-size: 13px; color: var(--muted); margin-top: 2px; }
+.empty { padding: 22px; text-align: center; color: var(--muted); font-size: 14px; }
+
+/* attendance table */
+.days { width: 100%; border-collapse: collapse; font-size: 14px; }
+.days th { text-align: start; font-family: var(--mono); font-weight: 400; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); padding: 14px 14px 10px; }
+.days td { padding: 12px 14px; border-top: 1px solid var(--border); vertical-align: middle; }
+.days td.num { font-variant-numeric: tabular-nums; font-family: var(--mono); font-size: 13px; }
+.days tr.off td { color: var(--faint); }
+.days .date b { display: block; font-weight: 600; color: var(--text); }
+.days .date span { font-size: 12px; color: var(--muted); }
+.days tr.off .date b { color: var(--faint); }
+.days .c-times { display: none; }
+.notes { display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; }
+.tag { font-size: 12px; color: var(--muted); }
+.tag.miss { color: var(--warn); }
+.link-btn { border: 0; background: none; color: var(--accent-text); cursor: pointer; font-size: 13px; font-weight: 600; padding: 0; }
+
+/* leave cards */
+.balances { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; }
+.bal { padding: 18px; }
+.bal .top { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+.bal .name { font-weight: 600; }
+.bal .left { font-size: 30px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.bal .left small { font-size: 14px; color: var(--muted); font-weight: 500; }
+.bar { height: 6px; border-radius: 6px; background: var(--surface-2); margin: 14px 0 10px; overflow: hidden; }
+.bar i { display: block; height: 100%; background: var(--accent); border-radius: 6px; }
+.bal .meta { display: flex; gap: 14px; font-family: var(--mono); font-size: 11px; color: var(--muted); }
+.bal .hints { margin-top: 10px; font-size: 12px; color: var(--muted); }
+
+/* forms */
+.seg { display: inline-flex; padding: 5px; gap: 4px; border-radius: var(--pill); border: 1px solid var(--border); background: var(--surface); margin-bottom: 16px; }
+.seg button { border: 0; background: none; padding: 9px 18px; border-radius: var(--pill); color: var(--muted); font-weight: 600; cursor: pointer; }
+.seg button[aria-selected="true"] { background: var(--btn-bg); color: var(--btn-fg); }
+.form { padding: 22px; }
+.fields { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px 16px; }
+.field { display: flex; flex-direction: column; gap: 6px; }
+.field.full { grid-column: 1 / -1; }
+.field label { font-size: 13px; color: var(--muted); }
+.field input, .field select, .field textarea { height: 46px; padding: 0 14px; border-radius: 12px; border: 1px solid var(--border); background: var(--field-bg); }
+.field textarea { height: 90px; padding: 12px 14px; resize: vertical; }
+.field input:focus, .field select:focus, .field textarea:focus { border-color: var(--accent); outline: none; }
+.field select option { background: var(--solid); }
+.check { display: flex; align-items: center; gap: 10px; font-size: 14px; color: var(--muted); }
+.check input { width: 18px; height: 18px; accent-color: var(--accent); }
+.hint { font-size: 13px; color: var(--muted); margin-top: 12px; min-height: 18px; }
+.form-foot { display: flex; justify-content: flex-end; gap: 10px; margin-top: 18px; }
+input[type="date"], input[type="time"] { color-scheme: dark; }
+
+/* toast */
+.toast { position: fixed; left: 50%; bottom: 28px; transform: translateX(-50%) translateY(20px); opacity: 0; z-index: 50; max-width: min(560px, calc(100vw - 32px));
+	padding: 14px 18px; border-radius: 14px; background: var(--solid); border: 1px solid var(--border-2); box-shadow: var(--shadow); font-size: 14px; transition: .25s; pointer-events: none; }
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+.toast.ok { border-color: rgba(61,220,151,.5); } .toast.bad { border-color: rgba(255,107,107,.5); }
+.loading { opacity: .45; transition: opacity .2s; }
+
+/* bottom tab bar (mobile) */
+.bottom { display: none; }
+
+@media (max-width: 860px) {
+	.tabs { display: none; }
+	.nav { top: 10px; gap: 10px; padding: 0 8px 0 14px; }
+	.nav-right { margin-inline-start: auto; }
+	.hr-pick { width: 170px; }
+	/* phones: the list opens as a bottom sheet */
+	.picker-pop { position: fixed; left: 10px; right: 10px; top: auto; bottom: calc(10px + env(safe-area-inset-bottom)); width: auto;
+		max-height: 72vh; border-radius: 22px; z-index: 60; animation: pkUp .18s ease-out; }
+	@keyframes pkUp { from { transform: translateY(30px); opacity: 0; } to { transform: none; opacity: 1; } }
+	.pk-backdrop { display: block; position: fixed; inset: 0; background: rgba(0,0,0,.55); z-index: 55; }
+	.pk-item { padding: 11px 10px; }
+	.hero { padding: 34px 0 18px; }
+	.grid-2 { grid-template-columns: 1fr; }
+	.bottom { display: flex; position: fixed; left: 12px; right: 12px; bottom: calc(10px + env(safe-area-inset-bottom)); z-index: 30;
+		height: var(--tab-h); padding: 6px; border-radius: 22px; border: 1px solid var(--border); background: var(--nav-bg-strong);
+		backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); }
+	.bottom button { flex: 1; border: 0; background: none; color: var(--muted); border-radius: 16px; display: flex; flex-direction: column;
+		align-items: center; justify-content: center; gap: 4px; font-size: 11px; font-weight: 600; cursor: pointer; }
+	.bottom button svg { width: 22px; height: 22px; }
+	.bottom button[aria-selected="true"] { color: var(--accent-text); background: var(--accent-soft); }
+	.toast { bottom: calc(var(--tab-h) + 26px); }
+	/* attendance: table → cards */
+	.days thead { display: none; }
+	.days, .days tbody, .days td { display: block; width: 100%; }
+	.days tr { padding: 12px 14px; border-top: 1px solid var(--border); display: grid; grid-template-columns: 1fr auto; gap: 6px 12px; }
+	.days tr:first-child { border-top: 0; }
+	.days td { border: 0; padding: 0; }
+	.days td.c-date { grid-column: 1; grid-row: 1; }
+	.days td.c-status { grid-column: 2; grid-row: 1; justify-self: end; }
+	.days td.c-shift, .days td.c-in, .days td.c-out, .days td.c-hours, .days td.c-late { display: none; }
+	.days td.c-times { display: block; grid-column: 1 / -1; font-family: var(--mono); font-size: 12px; color: var(--muted); }
+	.days td.c-notes { grid-column: 1 / -1; }
+	.days td.c-times:empty, .days td.c-notes:has(.notes:empty) { display: none; }
+}
+@media (max-width: 520px) {
+	.wrap { padding: 10px 12px 120px; }
+	.brand .brand-text { display: none; }
+	.fields { grid-template-columns: 1fr; }
+	.stats { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+	.stat { padding: 14px; }
+	.stat .value { font-size: 28px; }
+	.actions .btn { flex: 1 1 100%; }
+	.seg { display: flex; } .seg button { flex: 1; padding: 9px 6px; }
+	.period span { min-width: 120px; }
+	.row { flex-wrap: wrap; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+{{ brand_style }}
+</head>
+<body>
+<div class="glow" aria-hidden="true"></div>
+<div class="wrap">
+	<header class="nav">
+		<div class="brand-wrap">
+			<button type="button" class="brand" id="brand-btn" {% if companies | length > 1 %}aria-haspopup="listbox" aria-expanded="false" title="{{ _('Switch company') }}"{% else %}disabled{% endif %}>
+				<span class="brand-logo" id="brand-logo">{% if brand.logo_html %}{{ brand.logo_html }}{% else %}<span class="initials">{{ brand.initials }}</span>{% endif %}</span>
+				<span class="brand-text"><b id="brand-name">{{ brand.name | upper }}</b><small>{{ _("EMPLOYEE PORTAL") }}</small></span>
+				{% if companies | length > 1 %}<svg class="brand-chev" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>{% endif %}
+			</button>
+			{% if companies | length > 1 %}<div class="picker-pop company-pop" id="company-pop" hidden>
+				<div class="pk-section">{{ _("Companies you can view") }}</div>
+				<div class="pk-list" id="company-list" role="listbox"></div>
+			</div>{% endif %}
+		</div>
+		<nav class="tabs" role="tablist">
+			<button class="tab" role="tab" data-tab="overview" aria-selected="true">{{ _("Overview") }}</button>
+			<button class="tab" role="tab" data-tab="attendance">{{ _("Attendance") }}</button>
+			<button class="tab" role="tab" data-tab="requests">{{ _("Requests") }}</button>
+			<button class="tab" role="tab" data-tab="leave">{{ _("Leave", context="Employee Portal") }}</button>
+		</nav>
+		<div class="nav-right">
+			{% if is_hr %}<div class="picker" id="picker">
+				<input type="hidden" id="employee" value="">
+				<button type="button" class="hr-pick" id="picker-btn" aria-haspopup="listbox" aria-expanded="false" title="{{ _('HR: view another employee') }}">
+					<span class="pk-avatar" id="picker-avatar" aria-hidden="true"></span>
+					<span class="pk-label" id="picker-label">{{ _("My dashboard") if employee else _("Select employee") }}</span>
+					<svg class="pk-chev" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+				</button>
+				<div class="picker-pop" id="picker-pop" hidden>
+					<div class="pk-search">
+						<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+						<input id="picker-search" type="search" placeholder="{{ _('Search name, ID or department') }}" autocomplete="off" aria-label="{{ _('Search employees') }}">
+					</div>
+					<div class="pk-list" id="picker-list" role="listbox" aria-label="{{ _('Employees') }}"></div>
+				</div>
+			</div>{% endif %}
+			<button class="avatar" id="avatar" aria-haspopup="true" aria-label="{{ _('Account') }}">{{ (full_name or "?")[0] | upper }}</button>
+		</div>
+		<div class="menu" id="menu">
+			<div class="who">{{ full_name }}<small>{{ frappe.session.user }}</small></div>
+			{% if has_desk %}<a href="/app">{{ _("Open ERPNext") }}</a>{% endif %}
+			<a href="/hr-handbook-guide">{{ _("HR Handbook Guide") }}</a>
+			<div class="menu-sep"></div>
+			<button id="mode-toggle" type="button"></button>
+			<button id="lang-toggle" type="button" lang="{{ 'en' if lang == 'ar' else 'ar' }}">{{ "English" if lang == "ar" else "العربية" }}</button>
+			<div class="menu-sep"></div>
+			<button id="logout">{{ _("Log out") }}</button>
+		</div>
+	</header>
+
+	<section class="hero">
+		<div class="eyebrow" id="greet-eyebrow">{{ _("Employee Portal") }}</div>
+		<h1><span id="greet">{{ _("Welcome") }},</span> <em id="first-name">{{ (full_name or "").split(" ")[0] }}</em></h1>
+		<p id="hero-sub">&nbsp;</p>
+		<div class="period" aria-label="{{ _('Attendance period') }}">
+			<button id="prev" aria-label="{{ _('Previous period') }}">‹</button>
+			<span id="period-label">…<small>&nbsp;</small></span>
+			<button id="next" aria-label="{{ _('Next period') }}">›</button>
+		</div>
+	</section>
+
+	<main id="app">
+		<div data-panel="overview">
+			<div class="actions">
+				<button class="btn primary" data-go-request="leave">{{ _("Request leave") }}</button>
+				<button class="btn" data-go-request="permission">{{ _("Request permission") }}</button>
+				<button class="btn" data-go-request="checkin">{{ _("Forgotten check-in") }}</button>
+			</div>
+			<div class="card today" id="today" hidden></div>
+			<div class="section"><div class="stats" id="stats"></div></div>
+			<div class="section grid-2">
+				<div>
+					<div class="section-head"><h2>{{ _("My <em>requests</em>") }}</h2><button class="link-btn" data-goto="requests">{{ _("View all") }}</button></div>
+					<div class="card list" id="recent-requests"></div>
+				</div>
+				<div>
+					<div class="section-head"><h2>{{ _("Deductions") }}</h2></div>
+					<div class="card list" id="deductions"></div>
+				</div>
+			</div>
+			<div class="section" id="overtime-section" hidden>
+				<div class="section-head"><h2>{{ _("Overtime") }}</h2></div>
+				<div class="card list" id="overtime"></div>
+			</div>
+		</div>
+
+		<div data-panel="attendance" hidden>
+			<div class="section-head"><h2>{{ _("Daily <em>attendance</em>") }}</h2><span class="eyebrow" id="att-count"></span></div>
+			<div class="card" style="overflow:hidden">
+				<table class="days">
+					<thead><tr><th>{{ _("Date") }}</th><th>{{ _("Shift") }}</th><th>{{ _("In") }}</th><th>{{ _("Out") }}</th><th>{{ _("Hours") }}</th><th>{{ _("Late") }}</th><th>{{ _("Status") }}</th><th class="c-times"></th><th>{{ _("Notes") }}</th></tr></thead>
+					<tbody id="days"></tbody>
+				</table>
+			</div>
+		</div>
+
+		<div data-panel="requests" hidden>
+			<div class="section-head"><h2>{{ _("New <em>request</em>") }}</h2></div>
+			<div class="seg" role="tablist" id="req-seg">
+				<button type="button" role="tab" data-form="leave" aria-selected="true">{{ _("Leave", context="Employee Portal") }}</button>
+				<button type="button" role="tab" data-form="permission">{{ _("Permission") }}</button>
+				<button type="button" role="tab" data-form="checkin">{{ _("Check-in") }}</button>
+			</div>
+			<form class="card form" id="form-leave" data-form-panel="leave">
+				<div class="fields">
+					<div class="field full"><label for="lv-type">{{ _("Leave type") }}</label><select id="lv-type" required></select></div>
+					<div class="field"><label for="lv-from">{{ _("From") }}</label><input id="lv-from" type="date" required></div>
+					<div class="field"><label for="lv-to">{{ _("To") }}</label><input id="lv-to" type="date" required></div>
+					<div class="field full"><label class="check"><input id="lv-half" type="checkbox"> {{ _("Half day (first day)") }}</label></div>
+					<div class="field full"><label for="lv-reason">{{ _("Reason") }}</label><textarea id="lv-reason" required></textarea></div>
+				</div>
+				<div class="hint" id="lv-hint"></div>
+				<div class="form-foot"><button class="btn primary" type="submit">{{ _("Send leave request") }}</button></div>
+			</form>
+			<form class="card form" id="form-permission" data-form-panel="permission" hidden>
+				<div class="fields">
+					<div class="field full"><label for="pm-type">{{ _("Type") }}</label>
+						<select id="pm-type"><option value="Late Arrival">{{ _("Late arrival") }}</option><option value="Early Departure">{{ _("Early departure") }}</option><option value="Temporary Absence">{{ _("Temporary absence") }}</option></select></div>
+					<div class="field full"><label for="pm-date">{{ _("Date") }}</label><input id="pm-date" type="date" required></div>
+					<div class="field"><label for="pm-start">{{ _("From") }}</label><input id="pm-start" type="time" required></div>
+					<div class="field"><label for="pm-end">{{ _("To") }}</label><input id="pm-end" type="time" required></div>
+					<div class="field full"><label for="pm-reason">{{ _("Reason") }}</label><textarea id="pm-reason" required></textarea></div>
+				</div>
+				<div class="hint" id="pm-hint"></div>
+				<div class="form-foot"><button class="btn primary" type="submit">{{ _("Send permission request") }}</button></div>
+			</form>
+			<form class="card form" id="form-checkin" data-form-panel="checkin" hidden>
+				<div class="fields">
+					<div class="field"><label for="ck-date">{{ _("Date") }}</label><input id="ck-date" type="date" required></div>
+					<div class="field"><label for="ck-time">{{ _("Time") }}</label><input id="ck-time" type="time" required></div>
+					<div class="field full"><label for="ck-type">{{ _("Forgot to") }}</label>
+						<select id="ck-type"><option value="">{{ _("Punch (in or out)") }}</option><option value="IN">{{ _("Check in") }}</option><option value="OUT">{{ _("Check out") }}</option></select></div>
+					<div class="field full"><label for="ck-reason">{{ _("Reason") }}</label><textarea id="ck-reason" required></textarea></div>
+				</div>
+				<div class="hint" id="ck-hint"></div>
+				<div class="form-foot"><button class="btn primary" type="submit">{{ _("Send check-in request") }}</button></div>
+			</form>
+			<div class="section">
+				<div class="section-head"><h2>{{ _("My <em>requests</em>") }}</h2></div>
+				<div class="card list" id="all-requests"></div>
+			</div>
+		</div>
+
+		<div data-panel="leave" hidden>
+			<div class="section-head"><h2>{{ _("Leave <em>balances</em>") }}</h2><button class="btn sm" data-go-request="leave">{{ _("Request leave") }}</button></div>
+			<div class="balances" id="balances"></div>
+		</div>
+	</main>
+</div>
+
+<nav class="bottom" role="tablist" aria-label="{{ _('Sections') }}">
+	<button role="tab" data-tab="overview" aria-selected="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/></svg>{{ _("Overview") }}</button>
+	<button role="tab" data-tab="attendance"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>{{ _("Attendance") }}</button>
+	<button role="tab" data-tab="requests"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 5v14M5 12h14"/></svg>{{ _("Requests") }}</button>
+	<button role="tab" data-tab="leave"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 20c4-1 6-4 7-9M11 11c3 0 6-2 8-6-4 0-7 1-8 6Z"/></svg>{{ _("Leave", context="Employee Portal") }}</button>
+</nav>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+window.csrf_token = "{{ csrf_token }}";
+(function () {
+	// translations of every __("…") string in this page (collected server-side, see hr_dashboard.py)
+	const MESSAGES = {{ messages | tojson }};
+	const LOCALE = {{ (lang or "en") | tojson }} === "ar" ? "ar-EG" : "en-GB";
+	const __ = (text, args) => {
+		let out = (MESSAGES && MESSAGES[text]) || text;
+		(args || []).forEach((a, i) => (out = out.split(`{${i}}`).join(a)));
+		return out;
+	};
+	const monthName = (m, style = "long") => new Date(2000, m - 1, 1).toLocaleDateString(LOCALE, { month: style });
+	const $ = (s, root = document) => root.querySelector(s);
+	const $$ = (s, root = document) => [...root.querySelectorAll(s)];
+	const esc = (v) => (v == null ? "" : String(v).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])));
+	const state = { year: null, month: null, options: null, todayISO: new Date().toLocaleDateString("en-CA") };
+	const OWN = {{ "true" if employee else "false" }};
+	const ME_NAME = {{ (full_name or "") | tojson }};
+	const COMPANIES = {{ companies | tojson }};
+	const OWN_BRAND = {{ brand | tojson }};
+	const viewing = () => ($("#employee") && $("#employee").value.trim()) || "";
+	const isOther = () => !!viewing();
+	const canRequest = () => OWN && !isOther();
+
+	// ---------- API
+	function serverMessage(body, fallback) {
+		try { return JSON.parse(JSON.parse(body._server_messages)[0]).message.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim(); } catch (e) {}
+		return body.exception ? body.exception.split(":").slice(1).join(":").trim() || fallback : fallback;
+	}
+	async function api(method, params = {}, post = false) {
+		const clean = Object.entries(params).filter(([, v]) => v !== "" && v != null);
+		const url = `/api/method/mobility_hr.api.hr.${method}` + (post ? "" : "?" + new URLSearchParams(clean));
+		const r = await fetch(url, post
+			? { method: "POST", body: new URLSearchParams(clean), headers: { Accept: "application/json", "X-Frappe-CSRF-Token": window.csrf_token } }
+			: { headers: { Accept: "application/json" } });
+		const body = await r.json().catch(() => ({}));
+		if (!r.ok) throw new Error(serverMessage(body, r.statusText));
+		return body.message;
+	}
+	let toastTimer;
+	function toast(msg, kind = "ok") {
+		const t = $("#toast"); t.textContent = msg; t.className = `toast show ${kind}`;
+		clearTimeout(toastTimer); toastTimer = setTimeout(() => (t.className = "toast"), 4500);
+	}
+
+	// ---------- tabs
+	function showTab(tab) {
+		$$("[data-panel]").forEach((p) => (p.hidden = p.dataset.panel !== tab));
+		$$("[data-tab]").forEach((b) => b.setAttribute("aria-selected", b.dataset.tab === tab));
+		window.scrollTo({ top: 0, behavior: "smooth" });
+		history.replaceState(null, "", "#" + tab);
+	}
+	function showForm(kind, prefill = {}) {
+		if (!canRequest()) { toast(__("Requests can only be made from your own account."), "bad"); return; }
+		showTab("requests");
+		$$("#req-seg button").forEach((b) => b.setAttribute("aria-selected", b.dataset.form === kind));
+		$$("[data-form-panel]").forEach((f) => (f.hidden = f.dataset.formPanel !== kind));
+		if (kind === "checkin" && prefill.date) $("#ck-date").value = prefill.date;
+		if (kind === "leave" && prefill.leave_type) { $("#lv-type").value = prefill.leave_type; leaveHint(); }
+	}
+	document.addEventListener("click", (e) => {
+		const t = e.target.closest("[data-tab],[data-goto],[data-go-request],[data-form],[data-request-day],[data-withdraw],[data-leave-request]");
+		if (!t) { if (!e.target.closest("#menu,#avatar")) $("#menu").classList.remove("open"); return; }
+		if (t.dataset.tab) showTab(t.dataset.tab);
+		else if (t.dataset.goto) showTab(t.dataset.goto);
+		else if (t.dataset.goRequest) showForm(t.dataset.goRequest);
+		else if (t.dataset.form) showForm(t.dataset.form);
+		else if (t.dataset.requestDay) showForm("checkin", { date: t.dataset.requestDay });
+		else if (t.dataset.leaveRequest) showForm("leave", { leave_type: t.dataset.leaveRequest });
+		else if (t.dataset.withdraw) withdraw(t.dataset.withdraw, t.dataset.name);
+	});
+	$("#avatar").addEventListener("click", () => $("#menu").classList.toggle("open"));
+	// ---------- Bright / Dark (saved in this browser, shared with login page, website and desk) + language
+	const MODE_KEY = {{ mode_key | tojson }};
+	const SUN = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>';
+	const MOON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>';
+	const isDark = () => document.documentElement.getAttribute("data-mp-mode") === "dark";
+	function paintModeToggle() {
+		$("#mode-toggle").innerHTML = isDark() ? `${SUN}<span>${__("Bright mode")}</span>` : `${MOON}<span>${__("Dark mode")}</span>`;
+		const meta = document.querySelector('meta[name="theme-color"]');
+		if (meta) meta.content = getComputedStyle(document.documentElement).getPropertyValue("--bg").trim() || "#ffffff";
+	}
+	$("#mode-toggle").addEventListener("click", () => {
+		const mode = isDark() ? "bright" : "dark";
+		document.documentElement.setAttribute("data-mp-mode", mode);
+		try { localStorage.setItem(MODE_KEY, mode); } catch (e) {}
+		paintModeToggle();
+	});
+	paintModeToggle();
+	$("#lang-toggle").addEventListener("click", async () => {
+		await fetch("/api/method/mobility_hr.branding.set_language", {
+			method: "POST", body: new URLSearchParams({ lang: $("#lang-toggle").getAttribute("lang") }),
+			headers: { Accept: "application/json", "X-Frappe-CSRF-Token": window.csrf_token },
+		}).catch(() => {});
+		location.reload();
+	});
+	$("#logout").addEventListener("click", async () => {
+		await fetch("/api/method/logout", { method: "POST", headers: { "X-Frappe-CSRF-Token": window.csrf_token } });
+		location.href = "/login";
+	});
+
+	// ---------- render
+	const STATUS = { "Present": "ok", "Work From Home": "info", "Half Day": "warn", "Absent": "bad", "On Leave": "accent", "Not Processed": "warn", "Not Marked": "bad" };
+	const STATE = { "Approved": "ok", "Applied": "ok", "Rejected": "bad", "Cancelled": "", "Pending Approval": "warn" };
+	const pill = (text, cls) => `<span class="pill ${cls || ""}">${esc(__(text))}</span>`;
+	const fmtDate = (iso) => new Date(iso + "T00:00:00").toLocaleDateString(LOCALE, { day: "numeric", month: "short" });
+	const stat = (label, value, sub, cls = "") => `<div class="card stat ${cls}"><div class="label">${esc(label)}</div><div class="value">${value == null ? "—" : value}</div>${sub ? `<div class="sub">${esc(sub)}</div>` : ""}</div>`;
+	const empty = (msg) => `<div class="empty">${esc(msg)}</div>`;
+
+	function requestRows(rows, limit) {
+		if (!rows.length) return empty(__("No requests yet."));
+		return rows.slice(0, limit || rows.length).map((r) => `
+			<div class="row">
+				<div class="main"><div class="t">${esc(__(r.title))} <span class="tag">· ${esc(__(r.kind))}</span></div>
+				<div class="s">${esc(r.when)}${r.detail ? " · " + esc(r.detail) : ""}</div></div>
+				${pill(r.state, STATE[r.state])}
+				${r.can_withdraw && canRequest() ? `<button class="link-btn" data-withdraw="${esc(r.doctype)}" data-name="${esc(r.name)}">${__("Withdraw")}</button>` : ""}
+			</div>`).join("");
+	}
+
+	function renderDays(days) {
+		$("#days").innerHTML = days.map((d) => {
+			const off = ["Weekly Off", "Public Holiday", "Not Employed", "Upcoming"].includes(d.status);
+			const notes = [];
+			if (d.holiday && d.holiday !== d.day) notes.push(`<span class="tag">${esc(d.holiday)}</span>`);
+			if (d.leave_type) notes.push(`<span class="tag">${esc(d.leave_type)}</span>`);
+			if (d.missing_check_in) notes.push(`<span class="tag miss">${__("Missing check-in")}</span>`);
+			if (d.missing_check_out) notes.push(`<span class="tag miss">${__("Missing check-out")}</span>`);
+			if (d.intervals > 1) notes.push(`<span class="tag">${__("{0} intervals", [d.intervals])}</span>`);
+			d.permissions.forEach((p) => notes.push(`<span class="tag">${esc(__(p.type))} ${esc(p.from)}–${esc(p.to)}</span>`));
+			if (d.checkin_request === "Pending Approval") notes.push(`<span class="pill warn">${__("Fix requested")}</span>`);
+			else if (d.checkin_request === "Approved" && (d.missing_check_in || d.missing_check_out)) notes.push(`<span class="pill ok">${__("Fix approved")}</span>`);
+			else if ((d.missing_check_in || d.missing_check_out || d.status === "Absent") && canRequest())
+				notes.push(`<button class="link-btn" data-request-day="${esc(d.date)}">${__("Request fix")}</button>`);
+			const times = [d.first_check_in && __("In {0}", [d.first_check_in]), d.last_check_out && __("Out {0}", [d.last_check_out]),
+				d.working_hours != null && __("{0} h", [d.working_hours.toFixed(2)]), d.late_minutes && __("{0} min late", [d.late_minutes])].filter(Boolean).join(" · ");
+			return `<tr class="${off ? "off" : ""}">
+				<td class="c-date date"><b>${fmtDate(d.date)}</b><span>${esc(__(d.day))}</span></td>
+				<td class="c-shift">${esc(d.shift || "")}</td>
+				<td class="c-in num">${esc(d.first_check_in || "")}</td>
+				<td class="c-out num">${esc(d.last_check_out || "")}</td>
+				<td class="c-hours num">${d.working_hours == null ? "" : d.working_hours.toFixed(2)}</td>
+				<td class="c-late num">${d.late_minutes || ""}</td>
+				<td class="c-status">${pill(d.status, STATUS[d.status])}</td>
+				<td class="c-times">${esc(times)}</td>
+				<td class="c-notes"><div class="notes">${notes.join("")}</div></td>
+			</tr>`;
+		}).join("") || `<tr><td>${empty(__("No days in this period."))}</td></tr>`;
+		const worked = days.filter((d) => ["Present", "Work From Home", "Half Day"].includes(d.status)).length;
+		$("#att-count").textContent = __("{0} days attended", [worked]);
+	}
+
+	function renderToday(days) {
+		const t = days.find((d) => d.date === state.todayISO);
+		$("#today").hidden = !t;
+		if (!t) return;
+		const item = (k, v) => `<div><div class="k">${k}</div><div class="v">${v}</div></div>`;
+		const live = t.status === "Not Processed" || t.status === "Not Marked" || t.status === "Upcoming";
+		const dayOff = ["Weekly Off", "Public Holiday", "On Leave"].includes(t.status);
+		$("#today").innerHTML = [
+			item(__("Today"), `${esc(__(t.day))}, ${fmtDate(t.date)}`),
+			item(__("Shift"), dayOff ? __("Day off") : t.shift ? `${esc(t.shift_start)}–${esc(t.shift_end)}` : "—"),
+			item(__("Checked in"), t.first_check_in ? esc(t.first_check_in) : dayOff ? "—" : `<span style="color:var(--warn)">${__("Not yet")}</span>`),
+			item(__("Status"), live ? pill(t.first_check_in ? "At work" : "Not checked in", t.first_check_in ? "ok" : "warn") : pill(t.status, STATUS[t.status])),
+		].join("");
+	}
+
+	function renderSummary(s, overtimeEnabled) {
+		const ded = Object.entries(s.total_deductions || {})
+			.map(([k, v]) => `${v}<small> ${esc(k === "Fraction of Daily Salary" ? __("days' pay") : __(k))}</small>`).join(" · ") || "0";
+		$("#stats").innerHTML = [
+			stat(__("Working days"), s.total_working_days, __("{0} so far", [s.working_days_to_date])),
+			stat(__("Days worked"), s.actual_worked_days, null, "accent"),
+			stat(__("Absent"), s.absent_days),
+			stat(__("Late minutes"), s.total_late_minutes),
+			stat(__("Half days"), s.half_days),
+			stat(__("Work from home"), s.work_from_home_days),
+			stat(__("Leave taken"), s.approved_leave_days, __("this period")),
+			stat(__("Annual leave left"), s.remaining_annual_leave, __(s.annual_leave_type || "")),
+			stat(__("Deductions"), ded),
+			overtimeEnabled ? stat(__("Overtime"), `${s.overtime_hours}<small> ${__("h")}</small>`, s.overtime_hours_pending ? __("{0} h pending", [s.overtime_hours_pending]) : "") : "",
+		].join("");
+	}
+
+	function renderBalances(rows) {
+		$("#balances").innerHTML = rows.length ? rows.map((b) => {
+			const pct = b.allocated ? Math.min(100, Math.round(((b.taken + b.pending_approval) / b.allocated) * 100)) : 0;
+			return `<div class="card bal">
+				<div class="top"><span class="name">${esc(__(b.leave_type))}</span><span class="left">${b.remaining}<small> / ${b.allocated}</small></span></div>
+				<div class="bar"><i style="width:${pct}%"></i></div>
+				<div class="meta"><span>${__("Taken {0}", [b.taken])}</span><span>${__("Pending {0}", [b.pending_approval])}</span>${b.expired ? `<span>${__("Expired {0}", [b.expired])}</span>` : ""}</div>
+				${b.hints && b.hints.length ? `<div class="hints">${esc(b.hints.join(" · "))}</div>` : ""}
+				${canRequest() ? `<div style="margin-top:12px"><button class="btn sm" data-leave-request="${esc(b.leave_type)}">${__("Request")}</button></div>` : ""}
+			</div>`;
+		}).join("") : `<div class="card">${empty(__("No leave allocated yet."))}</div>`;
+	}
+
+	function renderDeductions(d) {
+		const rows = [
+			...d.penalties.map((p) => ({ t: `${__("Late arrivals")} · ${__(p.frequency)}`, s: `${p.period_start === p.period_end ? p.period_start : p.period_start + " → " + p.period_end} · ${__("{0} min", [p.total_late_minutes])}`,
+				v: p.penalty_type === "Warning Only" ? __("Warning") : `${p.penalty_value} ${p.deduction_unit === "Fraction of Daily Salary" ? __("days' pay") : __(p.deduction_unit || "")}`, st: p.state })),
+			...d.half_day_deductions.map((h) => ({ t: __("Half day"), s: `${h.attendance_date} · ${__(h.leave_type)}`, v: __("{0} day", [h.deducted_days || h.deduction_days]), st: h.state })),
+		];
+		$("#deductions").innerHTML = rows.length
+			? rows.map((r) => `<div class="row"><div class="main"><div class="t">${esc(r.t)}</div><div class="s">${esc(r.s)}</div></div><b>${esc(r.v)}</b>${pill(r.st, STATE[r.st])}</div>`).join("")
+			: empty(__("No deductions this period."));
+	}
+
+	function renderOvertime(o, enabled) {
+		$("#overtime-section").hidden = !enabled;
+		if (!enabled) return;
+		$("#overtime").innerHTML = o.records.length
+			? o.records.map((r) => `<div class="row"><div class="main"><div class="t">${fmtDate(r.attendance_date)} · ${esc(__(r.day_type))}</div><div class="s">${__("{0} min", [r.overtime_minutes])}${r.comp_leave_days ? ` · ${r.comp_leave_days} ${esc(__(r.comp_leave_type))}` : ""}</div></div><b>${__("{0} h", [(r.overtime_minutes / 60).toFixed(2)])}</b>${pill(r.state, STATE[r.state])}</div>`).join("")
+			: empty(__("No overtime this period."));
+	}
+
+	// ---------- load
+	async function loadRequests() {
+		if (!canRequest()) {
+			$("#recent-requests").innerHTML = $("#all-requests").innerHTML = empty(isOther() ? __("Requests are shown for your own account only.") : __("No employee record is linked to your user."));
+			return;
+		}
+		const r = await api("get_my_requests", { limit: 50 });
+		$("#recent-requests").innerHTML = requestRows(r.data, 4);
+		$("#all-requests").innerHTML = requestRows(r.data);
+	}
+
+	async function load() {
+		const params = { year: state.year, month: state.month, employee: viewing() };
+		$("#app").classList.add("loading");
+		try {
+			const [dash, ded, ot, leaves] = await Promise.all([
+				api("get_dashboard", params), api("get_deductions", params), api("get_overtime", params),
+				api("get_leave_policies", { employee: viewing() }),
+			]);
+			state.year = dash.period.year; state.month = dash.period.month;
+			if (dash.employee.company && COMPANIES.length > 1) setBrand(dash.employee.company);
+			$("#period-label").innerHTML = `${monthName(state.month)} ${state.year}<small>${fmtDate(dash.period.start)} → ${fmtDate(dash.period.end)}</small>`;
+			$("#first-name").textContent = (dash.employee.employee_name || "").split(" ")[0];
+			$("#hero-sub").textContent = [dash.employee.designation, dash.employee.department, dash.data.handbook].filter(Boolean).join(" · ") || dash.employee.company;
+			renderSummary(dash.data.summary, dash.data.overtime_enabled);
+			renderToday(dash.data.days);
+			renderDays(dash.data.days);
+			renderDeductions(ded.data);
+			renderOvertime(ot.data, dash.data.overtime_enabled);
+			const hints = {};
+			(state.options ? state.options.leave_types : []).forEach((l) => (hints[l.leave_type] = l.hints));
+			renderBalances(leaves.data.balances.map((b) => ({ ...b, hints: hints[b.leave_type] || [] })));
+			loadRequests().catch((e) => toast(e.message, "bad"));
+		} catch (e) {
+			toast(e.message, "bad");
+		} finally {
+			$("#app").classList.remove("loading");
+		}
+	}
+
+	async function loadOptions() {
+		if (!OWN) return;
+		const r = await api("get_request_options");
+		state.options = r.data;
+		$("#lv-type").innerHTML = r.data.leave_types.map((l) => `<option value="${esc(l.leave_type)}">${esc(__(l.leave_type))} — ${__("{0} left", [l.remaining])}</option>`).join("")
+			|| `<option value="">${__("No leave allocated")}</option>`;
+		leaveHint();
+		const lim = r.data.permission_limits;
+		$("#pm-hint").textContent = [lim.per_period && __("{0} permission(s) per period", [lim.per_period]), lim.minutes_per_period && __("up to {0} minutes", [lim.minutes_per_period])].filter(Boolean).join(__(", "));
+		$("#ck-hint").textContent = (r.data.checkin_request_limit ? __("{0} request(s) per period.", [r.data.checkin_request_limit]) + " " : "")
+			+ __("HR approves before the punch is added and the day is recalculated.");
+	}
+	function leaveHint() {
+		const l = state.options && state.options.leave_types.find((x) => x.leave_type === $("#lv-type").value);
+		$("#lv-hint").textContent = l ? [__("{0} day(s) left", [l.remaining]), ...(l.hints || [])].join(" · ") : "";
+	}
+	$("#lv-type").addEventListener("change", leaveHint);
+	$("#lv-from").addEventListener("change", () => { if (!$("#lv-to").value || $("#lv-to").value < $("#lv-from").value) $("#lv-to").value = $("#lv-from").value; });
+
+	// ---------- submit
+	async function submit(form, method, params, done) {
+		const btn = $("button[type=submit]", form);
+		btn.disabled = true;
+		try {
+			const r = await api(method, params, true);
+			form.reset();
+			["#lv-from", "#lv-to", "#pm-date", "#ck-date"].forEach((s) => ($(s).value = state.todayISO));
+			toast(done(r.data));
+			loadRequests(); loadOptions();
+		} catch (e) {
+			toast(e.message, "bad");
+		} finally { btn.disabled = false; }
+	}
+	$("#form-leave").addEventListener("submit", (e) => {
+		e.preventDefault();
+		const half = $("#lv-half").checked;
+		submit(e.target, "create_leave_application", {
+			leave_type: $("#lv-type").value, from_date: $("#lv-from").value, to_date: $("#lv-to").value,
+			reason: $("#lv-reason").value, half_day: half ? 1 : 0, half_day_date: half ? $("#lv-from").value : "",
+		}, (d) => __("Leave request {0} sent ({1} day(s)).", [d.name, d.days]));
+	});
+	$("#form-permission").addEventListener("submit", (e) => {
+		e.preventDefault();
+		submit(e.target, "create_permission_request", {
+			permission_type: $("#pm-type").value, date: $("#pm-date").value, start_time: $("#pm-start").value, end_time: $("#pm-end").value, reason: $("#pm-reason").value,
+		}, (d) => __("Permission request {0} sent ({1} min).", [d.name, d.minutes]));
+	});
+	$("#form-checkin").addEventListener("submit", (e) => {
+		e.preventDefault();
+		submit(e.target, "create_checkin_request", {
+			date: $("#ck-date").value, time: $("#ck-time").value, log_type: $("#ck-type").value, reason: $("#ck-reason").value,
+		}, (d) => __("Check-in request {0} sent for approval.", [d.name]));
+	});
+	async function withdraw(doctype, name) {
+		if (!confirm(__("Withdraw {0}?", [name]))) return;
+		try { await api("withdraw_request", { doctype, name }, true); toast(__("{0} withdrawn.", [name])); loadRequests(); loadOptions(); }
+		catch (e) { toast(e.message, "bad"); }
+	}
+
+	// ---------- period navigation
+	function move(delta) {
+		let m = state.month + delta, y = state.year;
+		if (m < 1) { m = 12; y--; }
+		if (m > 12) { m = 1; y++; }
+		state.month = m; state.year = y; load();
+	}
+	$("#prev").addEventListener("click", () => move(-1));
+	$("#next").addEventListener("click", () => move(1));
+	if ($("#employee")) $("#employee").addEventListener("change", () => {
+		state.year = state.month = null;
+		if (!viewing() && !OWN) return;
+		load();
+		if (!isOther() && OWN) loadOptions().catch(() => {});
+	});
+
+	// ---------- HR employee picker (custom combobox: search, keyboard, bottom sheet on phones)
+	const picker = { list: [], filtered: [], active: 0, open: false, backdrop: null };
+	const initials = (name) => (name || "?").split(/\s+/).filter(Boolean).slice(0, 2).map((w) => w[0].toUpperCase()).join("");
+	const highlight = (text, q) => {
+		const t = esc(text);
+		if (!q) return t;
+		const i = String(text).toLowerCase().indexOf(q);
+		return i < 0 ? t : esc(text.slice(0, i)) + `<mark>${esc(text.slice(i, i + q.length))}</mark>` + esc(text.slice(i + q.length));
+	};
+	function pickerRender() {
+		const q = $("#picker-search").value.trim().toLowerCase();
+		const current = $("#employee").value;
+		const inCompany = (e) => COMPANIES.length < 2 || !state.company || e.company === state.company;
+		picker.filtered = picker.list.filter((e) => inCompany(e) && (!q || [e.employee_name, e.name, e.department, e.designation].some((v) => v && v.toLowerCase().includes(q))));
+		const rows = [];
+		if (!q) rows.push({ me: true });
+		rows.push(...picker.filtered);
+		picker.rows = rows;
+		picker.active = Math.min(picker.active, Math.max(rows.length - 1, 0));
+		const check = `<svg class="pk-check" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.6"><path d="m5 12 5 5 9-10"/></svg>`;
+		$("#picker-list").innerHTML = rows.length > (q ? 0 : 1) || !q ? rows.map((r, i) => r.me
+			? `<button type="button" class="pk-item ${i === picker.active ? "active" : ""}" role="option" data-pick="" aria-selected="${!current}">
+					<span class="pk-avatar ${OWN ? "me" : "none"}">${OWN ? esc(initials(ME_NAME)) : PERSON_ICON}</span>
+					<span class="pk-text"><span class="pk-name">${OWN ? __("My dashboard") : __("No employee selected")}</span><span class="pk-sub">${OWN ? __("Your own attendance and requests") : __("Pick someone below")}</span></span>${check}
+				</button>${picker.filtered.length ? `<div class="pk-section">${picker.filtered.length === 1 ? __("1 employee") : __("{0} employees", [picker.filtered.length])}${COMPANIES.length > 1 ? " · " + esc((COMPANIES.find((c) => c.company === state.company) || {}).name || "") : ""}</div>` : ""}`
+			: `<button type="button" class="pk-item ${i === picker.active ? "active" : ""}" role="option" data-pick="${esc(r.name)}" aria-selected="${current === r.name}">
+					<span class="pk-avatar">${esc(initials(r.employee_name))}</span>
+					<span class="pk-text"><span class="pk-name">${highlight(r.employee_name, q)}</span>
+					<span class="pk-sub">${highlight(r.name, q)}${r.department ? " · " + highlight(r.department, q) : ""}${r.designation ? " · " + esc(r.designation) : ""}</span></span>${check}
+				</button>`).join("")
+			: `<div class="pk-empty">${__("No employee matches “{0}”.", [esc(q)])}</div>`;
+		if (!picker.list.length && !q) $("#picker-list").insertAdjacentHTML("beforeend", `<div class="pk-empty">${__("No employees you can view.")}</div>`);
+		const act = $(".pk-item.active", $("#picker-list"));
+		if (act) act.scrollIntoView({ block: "nearest" });
+	}
+	function pickerOpen() {
+		picker.open = true;
+		$("#picker-pop").hidden = false;
+		$("#picker-btn").setAttribute("aria-expanded", "true");
+		if (window.matchMedia("(max-width: 860px)").matches) {
+			picker.backdrop = document.createElement("div");
+			picker.backdrop.className = "pk-backdrop";
+			picker.backdrop.addEventListener("click", pickerClose);
+			document.body.appendChild(picker.backdrop);
+			document.body.appendChild($("#picker-pop"));
+		}
+		$("#picker-search").value = "";
+		picker.active = 0;
+		pickerRender();
+		setTimeout(() => $("#picker-search").focus(), 30);
+	}
+	function pickerClose() {
+		picker.open = false;
+		$("#picker-pop").hidden = true;
+		$("#picker-btn").setAttribute("aria-expanded", "false");
+		if (picker.backdrop) { picker.backdrop.remove(); picker.backdrop = null; $("#picker").appendChild($("#picker-pop")); }
+	}
+	const PERSON_ICON = '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg>';
+	function setPickerAvatar(e) {
+		const a = $("#picker-avatar");
+		a.classList.toggle("me", !e && OWN);
+		a.classList.toggle("none", !e && !OWN);
+		if (e) a.textContent = initials(e.employee_name);
+		else if (OWN) a.textContent = initials(ME_NAME);
+		else a.innerHTML = PERSON_ICON;
+	}
+	function pickerSelect(id) {
+		const e = picker.list.find((x) => x.name === id);
+		$("#employee").value = id || "";
+		$("#picker-label").textContent = e ? e.employee_name : (OWN ? __("My dashboard") : __("Select employee"));
+		setPickerAvatar(e);
+		pickerClose();
+		$("#employee").dispatchEvent(new Event("change"));
+	}
+	async function loadEmployeePicker() {
+		if (!$("#picker")) return;
+		setPickerAvatar(null);
+		$("#picker-btn").addEventListener("click", () => (picker.open ? pickerClose() : pickerOpen()));
+		$("#picker-search").addEventListener("input", () => { picker.active = 0; pickerRender(); });
+		$("#picker-list").addEventListener("click", (e) => { const b = e.target.closest("[data-pick]"); if (b) pickerSelect(b.dataset.pick); });
+		$("#picker-pop").addEventListener("keydown", (e) => {
+			if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+				e.preventDefault();
+				picker.active = (picker.active + (e.key === "ArrowDown" ? 1 : -1) + picker.rows.length) % picker.rows.length;
+				pickerRender();
+			} else if (e.key === "Enter") {
+				e.preventDefault();
+				const r = picker.rows[picker.active];
+				if (r) pickerSelect(r.me ? "" : r.name);
+			} else if (e.key === "Escape") { pickerClose(); $("#picker-btn").focus(); }
+		});
+		document.addEventListener("click", (e) => { if (picker.open && !e.target.closest("#picker,#picker-pop")) pickerClose(); });
+		try {
+			picker.list = (await api("get_permitted_employees")).data;
+		} catch (e) { toast(e.message, "bad"); }
+	}
+	loadEmployeePicker();
+
+	// ---------- company brand + switcher (logo click): companies come from the server, permission-filtered
+	function companyLogoHtml(c, cls) {
+		return c.logo_html || `<span class="${cls || "initials"}">${esc(c.initials)}</span>`; // server-built, per-mode <img>s
+	}
+	// company colours (Company Theme) → CSS variables used by both modes
+	const THEME_VARS = { accent: ["--accent", "--mp-accent"], bright_accent: ["--mp-bright-accent"], dark_background: ["--mp-dark-bg"],
+		dark_surface: ["--mp-dark-surface"], bright_background: ["--mp-bright-bg"], bright_surface: ["--mp-bright-surface"] };
+	function applyTheme(theme) {
+		const root = document.documentElement;
+		Object.entries(THEME_VARS).forEach(([k, vars]) => vars.forEach((v) => (theme && theme[k] ? root.style.setProperty(v, theme[k]) : root.style.removeProperty(v))));
+		const meta = document.querySelector('meta[name="theme-color"]');
+		if (meta) meta.content = getComputedStyle(root).getPropertyValue("--bg").trim() || "#ffffff";
+	}
+	function setBrand(company) {
+		const c = COMPANIES.find((x) => x.company === company) || OWN_BRAND;
+		$("#brand-logo").innerHTML = companyLogoHtml(c);
+		$("#brand-name").textContent = (c.name || "").toUpperCase();
+		applyTheme(c.theme);
+		document.title = `${__("Employee Portal")} · ${c.name}`;
+	}
+	let companyOpen = false;
+	function companyClose() { companyOpen = false; if ($("#company-pop")) { $("#company-pop").hidden = true; $("#brand-btn").setAttribute("aria-expanded", "false"); } }
+	function companyRender() {
+		$("#company-list").innerHTML = COMPANIES.map((c) => `
+			<button type="button" class="pk-item" role="option" data-company="${esc(c.company)}" aria-selected="${c.company === state.company}">
+				<span class="pk-avatar">${c.logo_html || esc(c.initials)}</span>
+				<span class="pk-text"><span class="pk-name">${esc(c.name)}</span><span class="pk-sub">${esc(c.company)}</span></span>
+				<svg class="pk-check" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.6"><path d="m5 12 5 5 9-10"/></svg>
+			</button>`).join("");
+	}
+	function chooseCompany(company) {
+		state.company = company;
+		try { localStorage.setItem("hr_portal_company", company); } catch (e) {}
+		setBrand(company);
+		companyClose();
+		// keep the employee picker to this company; leave an employee of another company
+		const current = picker.list.find((e) => e.name === viewing());
+		if (current && current.company !== company) pickerSelect("");
+	}
+	if ($("#company-pop")) {
+		$("#brand-btn").addEventListener("click", () => {
+			companyOpen = !companyOpen;
+			$("#company-pop").hidden = !companyOpen;
+			$("#brand-btn").setAttribute("aria-expanded", String(companyOpen));
+			if (companyOpen) companyRender();
+		});
+		$("#company-list").addEventListener("click", (e) => { const b = e.target.closest("[data-company]"); if (b) chooseCompany(b.dataset.company); });
+		document.addEventListener("click", (e) => { if (companyOpen && !e.target.closest(".brand-wrap")) companyClose(); });
+		document.addEventListener("keydown", (e) => { if (e.key === "Escape") companyClose(); });
+	}
+	state.company = OWN_BRAND.company;
+	try {
+		const saved = localStorage.getItem("hr_portal_company");
+		if (saved && COMPANIES.some((c) => c.company === saved)) state.company = saved;
+	} catch (e) {}
+	setBrand(state.company);
+
+	// ---------- start
+	const h = new Date().getHours();
+	$("#greet").textContent = h < 12 ? __("Good morning,") : h < 18 ? __("Good afternoon,") : __("Good evening,");
+	$("#greet-eyebrow").textContent = new Date().toLocaleDateString(LOCALE, { weekday: "long", day: "numeric", month: "long" });
+	["#lv-from", "#lv-to", "#pm-date", "#ck-date"].forEach((s) => ($(s).value = state.todayISO));
+	const initial = (location.hash || "#overview").slice(1);
+	showTab(["overview", "attendance", "requests", "leave"].includes(initial) ? initial : "overview");
+	if (!OWN && !$("#employee")) {
+		$("#app").innerHTML = `<div class="card">${empty(__("No employee record is linked to your user. Please contact HR."))}</div>`;
+	} else if (!OWN) {
+		$("#hero-sub").textContent = __("Choose an employee from the list at the top.");
+		loadRequests();
+		$$("form.form button[type=submit], form.form input, form.form select, form.form textarea").forEach((el) => (el.disabled = true));
+		$$("[data-form-panel]").forEach((f) => f.insertAdjacentHTML("afterbegin", `<div class="hint" style="margin:0 0 14px">${__("No employee record is linked to your user, so you cannot send requests.")}</div>`));
+		$("#first-name").textContent = "{{ (full_name or '').split(' ')[0] }}";
+	} else {
+		loadOptions().then(load).catch((e) => { toast(e.message, "bad"); load(); });
+	}
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,294 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "field:device_name",
+ "creation": "2026-11-05 10:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "enabled",
+  "device_name",
+  "connection_type",
+  "serial_number",
+  "column_break_main",
+  "device_location",
+  "company",
+  "push_setup_help",
+  "pull_section",
+  "ip_address",
+  "port",
+  "column_break_pull",
+  "comm_password",
+  "timeout",
+  "force_udp",
+  "processing_section",
+  "log_type_mode",
+  "import_logs_from",
+  "column_break_processing",
+  "time_offset_minutes",
+  "latitude",
+  "longitude",
+  "status_section",
+  "last_activity",
+  "last_log_time",
+  "last_ip",
+  "column_break_status",
+  "last_sync_status",
+  "device_info",
+  "attlog_stamp",
+  "pending_command",
+  "command_id"
+ ],
+ "fields": [
+  {
+   "default": "1",
+   "fieldname": "enabled",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Enabled"
+  },
+  {
+   "fieldname": "device_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Device Name",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "default": "Push (ADMS / Cloud Server)",
+   "fieldname": "connection_type",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Connection Type",
+   "options": "Push (ADMS / Cloud Server)\nPull (TCP/IP)",
+   "reqd": 1
+  },
+  {
+   "description": "Printed on the device label or shown in Menu › System Info › Device Info. Required for Push mode.",
+   "fieldname": "serial_number",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Serial Number (SN)",
+   "mandatory_depends_on": "eval:doc.connection_type=='Push (ADMS / Cloud Server)'",
+   "unique": 1
+  },
+  {
+   "fieldname": "column_break_main",
+   "fieldtype": "Column Break"
+  },
+  {
+   "description": "Saved as Device ID / Location on each Employee Checkin. Defaults to the device name.",
+   "fieldname": "device_location",
+   "fieldtype": "Data",
+   "label": "Location / Device ID"
+  },
+  {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "label": "Company",
+   "options": "Company"
+  },
+  {
+   "depends_on": "eval:doc.connection_type=='Push (ADMS / Cloud Server)'",
+   "fieldname": "push_setup_help",
+   "fieldtype": "HTML",
+   "label": "Push Setup"
+  },
+  {
+   "depends_on": "eval:doc.connection_type=='Pull (TCP/IP)'",
+   "fieldname": "pull_section",
+   "fieldtype": "Section Break",
+   "label": "TCP/IP Connection"
+  },
+  {
+   "fieldname": "ip_address",
+   "fieldtype": "Data",
+   "label": "IP Address / Host",
+   "mandatory_depends_on": "eval:doc.connection_type=='Pull (TCP/IP)'"
+  },
+  {
+   "default": "4370",
+   "fieldname": "port",
+   "fieldtype": "Int",
+   "label": "Port"
+  },
+  {
+   "fieldname": "column_break_pull",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "description": "Device Comm Key (Menu › Comm. › Connection). 0 if not set.",
+   "fieldname": "comm_password",
+   "fieldtype": "Int",
+   "label": "Comm Key / Password"
+  },
+  {
+   "default": "15",
+   "fieldname": "timeout",
+   "fieldtype": "Int",
+   "label": "Timeout (seconds)"
+  },
+  {
+   "default": "0",
+   "fieldname": "force_udp",
+   "fieldtype": "Check",
+   "label": "Use UDP (old firmware)"
+  },
+  {
+   "fieldname": "processing_section",
+   "fieldtype": "Section Break",
+   "label": "Check-in Processing"
+  },
+  {
+   "default": "Leave Empty (Decide by Shift)",
+   "description": "Use \"Leave Empty\" when the Shift Type determines check-in/out by alternating entries. Use \"From Device Punch State\" only if employees press the Check-In / Check-Out keys on the device.",
+   "fieldname": "log_type_mode",
+   "fieldtype": "Select",
+   "label": "Log Type (IN / OUT)",
+   "options": "Leave Empty (Decide by Shift)\nFrom Device Punch State\nAll Punches are IN\nAll Punches are OUT"
+  },
+  {
+   "description": "Punches older than this are stored but not converted to Employee Checkins. Useful when the device holds years of history.",
+   "fieldname": "import_logs_from",
+   "fieldtype": "Datetime",
+   "label": "Import Logs From"
+  },
+  {
+   "fieldname": "column_break_processing",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "description": "Minutes added to the device time (e.g. -60 if the device clock is one hour ahead of the system time zone).",
+   "fieldname": "time_offset_minutes",
+   "fieldtype": "Int",
+   "label": "Time Offset (minutes)"
+  },
+  {
+   "description": "Only needed when geolocation tracking is enabled in HR Settings.",
+   "fieldname": "latitude",
+   "fieldtype": "Float",
+   "label": "Latitude",
+   "precision": "9"
+  },
+  {
+   "fieldname": "longitude",
+   "fieldtype": "Float",
+   "label": "Longitude",
+   "precision": "9"
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "status_section",
+   "fieldtype": "Section Break",
+   "label": "Status"
+  },
+  {
+   "fieldname": "last_activity",
+   "fieldtype": "Datetime",
+   "in_list_view": 1,
+   "label": "Last Contact",
+   "read_only": 1
+  },
+  {
+   "fieldname": "last_log_time",
+   "fieldtype": "Datetime",
+   "label": "Latest Punch Received",
+   "read_only": 1
+  },
+  {
+   "fieldname": "last_ip",
+   "fieldtype": "Data",
+   "label": "Last Seen From IP",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_status",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "last_sync_status",
+   "fieldtype": "Small Text",
+   "label": "Last Sync Status",
+   "read_only": 1
+  },
+  {
+   "fieldname": "device_info",
+   "fieldtype": "Small Text",
+   "label": "Device Info",
+   "read_only": 1
+  },
+  {
+   "fieldname": "attlog_stamp",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "ATTLOG Stamp",
+   "read_only": 1
+  },
+  {
+   "fieldname": "pending_command",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "Pending Command",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "command_id",
+   "fieldtype": "Int",
+   "hidden": 1,
+   "label": "Command ID",
+   "read_only": 1
+  }
+ ],
+ "index_web_pages_for_search": 0,
+ "links": [
+  {
+   "link_doctype": "Biometric Attendance Log",
+   "link_fieldname": "device"
+  }
+ ],
+ "modified": "2026-11-05 10:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Mobility",
+ "name": "Biometric Device",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "HR Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "read": 1,
+   "report": 1,
+   "role": "HR User"
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

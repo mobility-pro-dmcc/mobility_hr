@@ -1,0 +1,123 @@
+{
+ "actions": [],
+ "creation": "2026-11-05 18:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "enabled",
+  "rule_name",
+  "frequency",
+  "condition",
+  "min_minutes",
+  "max_minutes",
+  "cb_1",
+  "penalty_type",
+  "penalty_value",
+  "deduction_unit",
+  "leave_type"
+ ],
+ "fields": [
+  {
+   "columns": 1,
+   "default": "1",
+   "fieldname": "enabled",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Enabled"
+  },
+  {
+   "columns": 2,
+   "fieldname": "rule_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Rule Name",
+   "reqd": 1
+  },
+  {
+   "columns": 1,
+   "default": "Daily",
+   "fieldname": "frequency",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Calculation Frequency",
+   "options": "Daily\nWeekly\nMonthly",
+   "reqd": 1
+  },
+  {
+   "columns": 1,
+   "default": "Between",
+   "description": "Between: min \u2264 late minutes \u2264 max. Greater Than: late minutes > min.",
+   "fieldname": "condition",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Condition",
+   "options": "Between\nGreater Than",
+   "reqd": 1
+  },
+  {
+   "columns": 1,
+   "fieldname": "min_minutes",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "Minimum Late Minutes",
+   "non_negative": 1,
+   "reqd": 1
+  },
+  {
+   "columns": 1,
+   "fieldname": "max_minutes",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "Maximum Late Minutes",
+   "mandatory_depends_on": "eval:doc.condition=='Between'",
+   "non_negative": 1
+  },
+  {
+   "fieldname": "cb_1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "columns": 2,
+   "fieldname": "penalty_type",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Penalty Type",
+   "options": "Fixed Amount\nWorking Hours\nLeave Days\nDay's Salary Fraction\nWarning Only",
+   "reqd": 1
+  },
+  {
+   "columns": 1,
+   "fieldname": "penalty_value",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Penalty Value",
+   "non_negative": 1
+  },
+  {
+   "fieldname": "deduction_unit",
+   "fieldtype": "Data",
+   "label": "Deduction Unit",
+   "read_only": 1
+  },
+  {
+   "depends_on": "eval:doc.penalty_type=='Leave Days'",
+   "fieldname": "leave_type",
+   "fieldtype": "Link",
+   "label": "Leave Type (for Leave Days)",
+   "mandatory_depends_on": "eval:doc.penalty_type=='Leave Days'",
+   "options": "Leave Type"
+  }
+ ],
+ "istable": 1,
+ "links": [],
+ "modified": "2026-11-05 18:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Mobility HR",
+ "name": "Handbook Late Penalty Rule",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

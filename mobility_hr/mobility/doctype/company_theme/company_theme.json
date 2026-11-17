@@ -1,0 +1,192 @@
+{
+ "actions": [],
+ "autoname": "field:company",
+ "creation": "2026-11-17 14:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "company",
+  "theme_name",
+  "cb_0",
+  "enabled",
+  "display_name",
+  "colors_section",
+  "accent_color",
+  "cb_1",
+  "bright_accent",
+  "bright_section",
+  "bright_background",
+  "cb_2",
+  "bright_surface",
+  "dark_section",
+  "dark_background",
+  "cb_3",
+  "dark_surface",
+  "logos_section",
+  "bright_logo",
+  "cb_logos",
+  "dark_logo",
+  "preview_section",
+  "preview"
+ ],
+ "fields": [
+  {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Company",
+   "options": "Company",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "description": "For your reference, e.g. 'Midnight Cyan'.",
+   "fieldname": "theme_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Theme Name"
+  },
+  {
+   "fieldname": "cb_0",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "1",
+   "fieldname": "enabled",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Enabled"
+  },
+  {
+   "description": "Shown instead of the company name (optional).",
+   "fieldname": "display_name",
+   "fieldtype": "Data",
+   "label": "Display Name"
+  },
+  {
+   "fieldname": "colors_section",
+   "fieldtype": "Section Break",
+   "label": "Accent"
+  },
+  {
+   "default": "#29f2e8",
+   "description": "Glow, highlights and active items. Used as-is on dark backgrounds.",
+   "fieldname": "accent_color",
+   "fieldtype": "Color",
+   "in_list_view": 1,
+   "label": "Accent Color",
+   "reqd": 1
+  },
+  {
+   "fieldname": "cb_1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "description": "A darker shade for text and lines on white. Empty = the accent darkened automatically.",
+   "fieldname": "bright_accent",
+   "fieldtype": "Color",
+   "label": "Accent on Bright Backgrounds"
+  },
+  {
+   "fieldname": "bright_section",
+   "fieldtype": "Section Break",
+   "label": "Bright Mode (default)"
+  },
+  {
+   "default": "#ffffff",
+   "fieldname": "bright_background",
+   "fieldtype": "Color",
+   "label": "Background"
+  },
+  {
+   "fieldname": "cb_2",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "#f6f7f8",
+   "fieldname": "bright_surface",
+   "fieldtype": "Color",
+   "label": "Surface (cards, page)"
+  },
+  {
+   "fieldname": "dark_section",
+   "fieldtype": "Section Break",
+   "label": "Dark Mode"
+  },
+  {
+   "default": "#000000",
+   "fieldname": "dark_background",
+   "fieldtype": "Color",
+   "label": "Background"
+  },
+  {
+   "fieldname": "cb_3",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "#0b0b0b",
+   "fieldname": "dark_surface",
+   "fieldtype": "Color",
+   "label": "Surface (cards, forms)"
+  },
+  {
+   "fieldname": "logos_section",
+   "fieldtype": "Section Break",
+   "label": "Logos",
+   "description": "Optional. Empty = the Company's <b>Company Logo</b> (then Brand Settings › Fallback Logo). Use transparent PNG or SVG."
+  },
+  {
+   "fieldname": "bright_logo",
+   "fieldtype": "Attach Image",
+   "label": "Logo for Bright Mode",
+   "description": "Shown on light backgrounds. Empty = the Dark Mode logo turned black."
+  },
+  {
+   "fieldname": "cb_logos",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "dark_logo",
+   "fieldtype": "Attach Image",
+   "label": "Logo for Dark Mode",
+   "description": "Shown on dark backgrounds. Empty = the Company Logo."
+  },
+  {
+   "fieldname": "preview_section",
+   "fieldtype": "Section Break",
+   "label": "Preview"
+  },
+  {
+   "fieldname": "preview",
+   "fieldtype": "HTML",
+   "label": "Preview"
+  }
+ ],
+ "links": [],
+ "modified": "2026-11-17 18:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Mobility",
+ "name": "Company Theme",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "export": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "write": 1
+  },
+  {
+   "read": 1,
+   "role": "HR Manager"
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "company",
+ "track_changes": 1
+}
